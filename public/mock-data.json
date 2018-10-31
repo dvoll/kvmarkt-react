@@ -1,0 +1,14 @@
+{
+    "words": [
+        {
+            "id": 1,
+            "en": "Tree",
+            "de": "Baum",
+            "description": {
+                "en": "Something in the woods.",
+                "de": "Etwas im Wald."
+            },
+            "added": "208-08-17 13:12:00"
+        }
+    ]
+}
