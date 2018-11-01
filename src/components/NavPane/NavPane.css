@@ -1,0 +1,63 @@
+
+.NavPane-nav,
+.NavPane-dummy {
+    --foreground-rgb: 85, 85, 85;
+    --background-rgb: 238, 238, 238;
+    --accent-rgb: 187, 0, 0;
+
+    --foreground-color: rgb(var(--foreground-rgb));
+    --background-color: rgb(var(--background-rgb));
+    --accent-color: rgb(var(--accent-rgb));
+    
+    --nav-height: 50px;
+    box-sizing: border-box;
+}
+
+.NavPane-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--nav-height);
+
+    background: var(--background-color);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-content: stretch;
+}
+
+.NavPane-dummy {
+    display: block;
+    width: 100%;
+    margin-bottom: var(--nav-height);
+}
+
+.NavPane-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5px 15px;
+    margin: 0 5px;
+    text-decoration: none;
+    color: var(--foreground-color);
+}
+
+.NavPane-link > span {
+    --border-bottom-color: rgba(0,0,0,0);
+    /* border: 1px solid rgba(0,0,0,0); */
+    padding: 1px 0;
+    border-bottom: 1px solid var(--border-bottom-color)
+}
+
+/* .NavPane-link.active > span, */
+.NavPane-link:hover > span
+{
+    --border-bottom-color: var(--foreground-color);
+}
+
+.NavPane-link.active > span {
+    color: var(--accent-color);
+    --border-bottom-color: var(--accent-color);
+}

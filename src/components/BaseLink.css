@@ -1,0 +1,52 @@
+.BaseLink
+{
+    position: relative;
+    --color: #666;
+    color: var(--color);
+    text-decoration: none;
+    padding: 0px 5px 0px 3px;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: baseline;
+    font-size: 0.9em;
+    /* line-height: 1em; */
+}
+
+.BaseLink svg {
+    align-self: center;
+    fill: var(--color);
+}
+
+.BaseLink::after
+{
+    content: ' ';
+    position: absolute;
+    z-index: -1;
+    left: -1px;
+    top: -1px;
+    right: -1px;
+    bottom: -1px;
+
+    border-radius: 25px;    
+}
+
+.BaseLink > * {
+    padding: 0 0.1em;
+}
+
+.BaseLink.arrow {
+    padding-left: 0.5em;
+}
+.BaseLink.arrow icon-use {
+    fill: var(--color);
+    height: 0.8em;
+    margin-right: 4px;
+}
+
+.BaseLink:hover::after {
+    background-color: #ddd;
+}
+.BaseLink:hover {
+    --color: #111;
+}

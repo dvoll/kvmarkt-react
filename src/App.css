@@ -1,9 +1,8 @@
 .App {
   /* text-align: center; */
   padding: 15px;
-  display: flex;
-  flex-direction: column;
   height: 100vh;
+  color: rgb(50,50,50);
 }
 
 .App-logo {
