@@ -16,16 +16,19 @@ const NavPane = (props: Props) => {
     return <React.Fragment>
             <div className="NavPane-dummy" />
             <ThemeContext.Consumer>
-                {theme => <nav className="NavPane-nav" style={
-                    { 
-                        ["--foreground-rgb" as any]: theme.foreground, 
-                        ["--background-rgb" as any]: theme.background, 
-                        ["--accent-rgb" as any]: theme.accent, 
-                    }}>
-                        {backButton}
-                        {navLinks}
-                        {sideContent}
-                    </nav>}
+                {theme => {
+                console.log("theme", theme)
+                    return (<nav className="NavPane-nav" style={
+                        { 
+                            ["--foreground-rgb" as any]: theme.foreground, 
+                            ["--background-rgb" as any]: theme.background, 
+                            ["--accent-rgb" as any]: theme.accent, 
+                        }}>
+                            {backButton}
+                            {navLinks}
+                            {sideContent}
+                    </nav> )}
+                    }
             </ThemeContext.Consumer>
         </React.Fragment>;
 }

@@ -1,4 +1,3 @@
-import { ThemeContext, themes } from "@dvll/ulight-react";
 import * as React from "react";
 import { Redirect, Route, Switch } from "react-router";
 import Dashboard from "src/views/dashboard/Dashboard";
@@ -22,9 +21,7 @@ class UserApp extends React.Component<Props, State> {
     public render() {
         return (
             <React.Fragment>
-                <ThemeContext.Provider value={themes.light}>
                     <NavPane navLinks={[{ name: "Home", to: "/dashboard" }, { name: "Programme", to: "/schemes" }]} />
-                </ThemeContext.Provider>
                 <Switch>
                     <Route path="/dashboard" component={Dashboard} />
                     <Route path="/schemes" component={SchemeList} />
