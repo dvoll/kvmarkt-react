@@ -3,6 +3,8 @@ import { Redirect, Route, Switch } from "react-router";
 import Dashboard from "src/views/dashboard/Dashboard";
 import SchemeList from "src/views/scheme-list/SchemeList";
 import NavPane from "../NavPane/NavPane";
+import ResponsiveNav from "../ResponsiveNav/ResponsiveNav";
+import TabBar from "../TabBar/TabBar";
 
 interface State {
     time: Date;
@@ -13,15 +15,24 @@ interface Props {
 
 class UserApp extends React.Component<Props, State> {
 
+    private navLinks = [
+        { name: "Home", to: "/dashboard" },
+        { name: "Programme", to: "/schemes" }
+    ];
+
     constructor(props: Props) {
         super(props);
-        this.state = { time: new Date()};
+        this.state = { time: new Date() };
     }
+
 
     public render() {
         return (
             <React.Fragment>
-                    <NavPane navLinks={[{ name: "Home", to: "/dashboard" }, { name: "Programme", to: "/schemes" }]} />
+                <ResponsiveNav
+                    mobileNav={<TabBar navLinks={this.navLinks} />}
+                    desktopNav={<NavPane navLinks={this.navLinks} />}
+                />
                 <Switch>
                     <Route path="/dashboard" component={Dashboard} />
                     <Route path="/schemes" component={SchemeList} />

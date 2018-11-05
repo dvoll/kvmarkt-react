@@ -6,10 +6,11 @@ import './NavPane.css';
 interface Props {
     backButton?: boolean;
     navLinks: Array<{name: string, to: string}>;
-    children?: any;
 }
 
-const NavPane = (props: Props) => {
+
+// TODO Add lifecycle hook for monitoring scroll position and show a seperator
+const NavPane: React.SFC<Props> = (props) => {
     const backButton = props.backButton && <Link className="NavPane-back" to="/"><span>b</span></Link>
     const navLinks = props.navLinks.map((l) => <NavLink className="NavPane-link" key={l.to} to={l.to}><span>{l.name}</span></NavLink>)
     const sideContent = props.children && <span className="NavPane-side">props.children</span>;
