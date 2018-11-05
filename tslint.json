@@ -11,6 +11,7 @@
     "interface-name": false,
     "jsx-boolean-value": false,
     "no-console": false,
-    "defaultSeverity": "warning"
+    "defaultSeverity": "warning",
+    "object-literal-sort-keys": false
   }
 }
