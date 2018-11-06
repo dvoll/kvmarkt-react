@@ -11,17 +11,28 @@ export interface LinkProps {
 }
 
 const BaseLink: React.SFC<LinkProps> = (props) => {
+    const {style, className, name, children, ...restProps} = props;
     return (
         <ThemeContext.Consumer>
             {theme => {
-                const style = {["--foreground-rgb" as any] : theme.foreground, ["--secondary-rgb" as any]: theme.secondary }
+                const styles = {
+                    ["--foreground-rgb" as any] : theme.foreground, 
+                    ["--secondary-rgb" as any]: theme.secondary,
+                    ["--background-rgb" as any]: theme.background,
+                    ...style
+                }
+                const classNames = 
+                    "Ulight-container Ulight-link BaseLink " + 
+                    className
+                ;
+                
                 return (
                     <NavLink 
-                        className={"BaseLink " + props.className }
-                        style={style} 
-                        to={props.to}
+                        className={classNames}
+                        style={styles} 
+                        {...restProps}
                     >
-                        {props.children}
+                        {children}
                     </NavLink>
                 )
             }}
