@@ -1,0 +1,143 @@
+.SchemeCard,
+.SchemeCard *, 
+.SchemeCard *, 
+.SchemeCard *::before
+{
+    box-sizing: border-box;
+}
+
+.SchemeCard {
+    position: relative;
+    width: 300px;
+    height: 360px;
+    --margin-side: 20px;
+    padding: 38px var(--margin-side) 12px var(--margin-side);
+    background: #fff;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    border-radius: 4px;
+    margin: 6px;
+}
+
+
+.iconToggle.Ulight-button,
+.badge.Ulight-button
+{
+    /* background: rgb(170, 84, 84); */
+    height: 20px;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 0.6em;
+    font-weight: 700;
+    border: none;
+    /* color: #f2f2f2; */
+    align-self: flex-end;
+    /* --foreground-rgb: 242, 242, 242 !important; */
+}
+
+.iconToggle.Ulight-button {
+    position: absolute;
+    right: var(--margin-side);
+    top: 10px;
+    height: 20px;
+    align-self: flex-end;
+    /* background: rgb(223, 72, 72); */
+}
+
+.iconToggle.Ulight-button.has-icon > :first-child,
+.badge.Ulight-button.has-icon > :first-child 
+{
+    height: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.BaseLabel {
+    /* font-size: 0.7em; */
+}
+
+p, h2 {
+    margin: 0;
+    line-height: 1.3em;
+    
+}
+
+h2 {
+    font-weight: 400;
+}
+
+p {
+    color: rgba(var(--foreground-rgb, 80,80,80), 0.95);
+    line-height: 1.3em;
+}
+
+.details {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.detail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 1.2em;
+}
+
+.detail > *:nth-child(2) {
+    font-size: 0.2em;
+}
+
+.images {
+    /* height: 80px; */
+    width: 100%;
+    height: 80px;
+    background-image: url(./kvmarkt-card-images.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}    
+
+
+.badge.category-1 { /* Geländespiel */
+    background: #728a6d; /* #256618; */
+}
+.badge.category-3 { /* Sport/Bewegung */
+    background: #91b782; /* #5e8a4d; */
+}
+.badge.category- { /* Junsgcharspiele */
+    background: #4148a5;
+}
+.badge.category-4 { /* LARPG */
+    background: #3a767a;
+}
+.badge.category-5 { /* Bibelarbeit */
+    background: #dcdda2;
+}
+.badge.category-6 { /* Basteln */
+    background: #803649;
+}
+.badge.category-7 { /* Kochen und Backen */
+    background: #34612c;
+}
+.badge.category-8 { /* Spiel/Show */
+    background: #4f3168;
+}
+.badge.category-10 { /* Quiz */
+    background: #573737;
+}
+.badge.category-12 { /* Wasser */
+    background: #41698a;
+}
+.badge.category-13 { /* Schnee */
+    background: #cacaca;
+}
+.badge.category-12 { /* Dorfspiel */
+    background: #bd8047;
+}
+.badge.category-11 { /* Sonstiges */
+    background: #585858;
+}
