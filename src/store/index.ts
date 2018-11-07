@@ -4,14 +4,16 @@ import { Action, AnyAction, combineReducers, Dispatch } from 'redux'
 
 import { heroesReducer } from "./schemes/reducers";
 
-import { HeroesState } from "./schemes/types";
+import { combineEpics } from 'redux-observable';
+import { schemesRequestEpic } from './schemes/epics';
+import { SchemesState } from "./schemes/types";
 
 // The top-level state object.
 //
 // `connected-react-router` already injects the router state typings for us,
 // so we can ignore them here.
 export interface ApplicationState {
-    schemes: HeroesState
+    schemes: SchemesState
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property
@@ -20,6 +22,10 @@ export interface ApplicationState {
 export const rootReducer = combineReducers<ApplicationState>({
     schemes: heroesReducer,
 })
+
+export const rootEpic = combineEpics(
+    schemesRequestEpic
+);
 
 export interface ConnectedReduxProps<A extends Action = AnyAction> {
     dispatch: Dispatch<A>

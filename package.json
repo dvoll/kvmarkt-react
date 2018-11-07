@@ -4,13 +4,14 @@
   "private": true,
   "dependencies": {
     "normalize-css": "^2.3.1",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1",
+    "react-redux": "^5.1.0",
     "react-responsive": "^6.0.0",
     "react-router-dom": "^4.3.1",
-    "react-scripts-ts": "^3.1.0",
     "redux": "^4.0.1",
-    "react-redux": "^5.1.0",
+    "redux-observable": "^1.0.0",
+    "rxjs": "^6.3.3",
     "typesafe-actions": "^2.0.4"
   },
   "scripts": {
@@ -29,6 +30,10 @@
     "@types/react-responsive": "^3.0.2",
     "@types/react-router-dom": "^4.3.1",
     "html-loader": "^0.5.5",
+    "react-scripts-ts": "^3.1.0",
     "typescript": "^3.1.4"
+  },
+  "resolutions": {
+    "@types/react": "^16.4.18"
   }
 }

@@ -1,4 +1,4 @@
-import { createStore, Store } from 'redux'
+import { applyMiddleware, createStore, Store } from 'redux'
 // import createSagaMiddleware from 'redux-saga'
 // `react-router-redux` is deprecated, so we use `connected-react-router`.
 // This provides a Redux middleware which connects to our `react-router` instance.
@@ -10,11 +10,15 @@ import { createStore, Store } from 'redux'
 // import { History } from 'history'
 
 // Import the state interface and our combined reducers/sagas.
-import { ApplicationState, rootReducer } from './store'
+import { createEpicMiddleware } from 'redux-observable';
+import { ApplicationState, rootEpic, rootReducer } from './store'
+
+
+const epicMiddleware = createEpicMiddleware();
 
 export default function configureStore(
     // history: History,
-    initialState: ApplicationState
+    initialState?: ApplicationState
 ): Store<ApplicationState> {
     // create the composing function for our middlewares
     // const composeEnhancers = composeWithDevTools({})
@@ -24,10 +28,12 @@ export default function configureStore(
     // We'll create our store with the combined reducers/sagas, and the initial Redux state that
     // we'll be passing from our entry point.
     const store = createStore(
-        rootReducer, // connectRouter(history)(rootReducer),
-        initialState
-        // composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
-    )
+        rootReducer, 
+        initialState, // composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware)) // connectRouter(history)(rootReducer),
+        applyMiddleware(epicMiddleware)    
+    );
+
+    epicMiddleware.run(rootEpic);
 
     // Don't forget to run the root saga, and return the store object.
     // sagaMiddleware.run(rootSaga)

@@ -1,8 +1,8 @@
-import { Reducer } from 'redux'
-import { HeroesActionTypes, HeroesState } from './types'
+import { AnyAction, Reducer } from 'redux';
+import { SchemesActionTypes, SchemesState } from './types'
 
 // Type-safe initialState!
-const initialState: HeroesState = {
+export const initialState: SchemesState = {
     data: [],
     errors: undefined,
     loading: false
@@ -10,15 +10,15 @@ const initialState: HeroesState = {
 
 // Thanks to Redux 4's much simpler typings, we can take away a lot of typings on the reducer side,
 // everything will remain type-safe.
-const reducer: Reducer<HeroesState> = (state = initialState, action) => {
+const reducer: Reducer<SchemesState> = (state: SchemesState = initialState, action: AnyAction) => { // 
     switch (action.type) {
-        case HeroesActionTypes.FETCH_REQUEST: {
+        case SchemesActionTypes.FETCH_REQUEST: {
             return { ...state, loading: true }
         }
-        case HeroesActionTypes.FETCH_SUCCESS: {
+        case SchemesActionTypes.FETCH_SUCCESS: {
             return { ...state, loading: false, data: action.payload }
         }
-        case HeroesActionTypes.FETCH_ERROR: {
+        case SchemesActionTypes.FETCH_ERROR: {
             return { ...state, loading: false, errors: action.payload }
         }
         default: {
