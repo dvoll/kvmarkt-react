@@ -8,6 +8,8 @@
     --foreground-color: rgb(var(--foreground-rgb));
     --background-color: rgb(var(--background-rgb));
     --accent-color: rgb(var(--accent-rgb));
+
+    --focus-border-color: rgba(var(--foreground-rgb), 0.2);
     
     --nav-height: 50px;
     box-sizing: border-box;
@@ -15,6 +17,7 @@
 
 .NavPane-nav {
     position: fixed;
+    z-index: 50;
     top: 0;
     left: 0;
     width: 100%;
@@ -26,6 +29,10 @@
     flex-direction: row;
     justify-content: start;
     align-content: stretch;
+}
+
+.NavPane-nav.divider {
+    border-bottom: rgba(var(--foreground-rgb), 0.15) 1px solid;
 }
 
 .NavPane-dummy {
@@ -42,6 +49,15 @@
     margin: 0 5px;
     text-decoration: none;
     color: var(--foreground-color);
+
+    --border-color: rgba(0,0,0,0);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+}
+
+.NavPane-link:focus {
+    border-color: var(--focus-border-color);
+    outline: none;
 }
 
 .NavPane-link > span {

@@ -1,47 +1,53 @@
+import { BaseHeading, BaseLabel } from "@dvll/ulight-react";
 import * as React from "react";
+import ItemGrid from "src/components/ItemGrid/ItemGrid";
+import PageLayout from "src/components/layout/PageLayout/PageLayout";
+import SchemeForm from "src/components/SchemeForm/SchemeForm";
+import { SchemeContext } from "src/scheme/scheme-context";
+import SchemeCard from "src/scheme/SchemeCard/SchemeCard";
 // import PageLayout from "src/components/layout/PageLayout/PageLayout";
 // import { Scheme } from "src/scheme";
-import SchemeCard from "src/scheme/SchemeCard/SchemeCard";
-import { schemes } from "src/scheme/schemes.mock";
+// import SchemeCard from "src/scheme/SchemeCard/SchemeCard";
+// import { schemes } from "src/scheme/schemes.mock";
 
-interface Props {
-    time: Date;
-}
+class SchemeList extends React.Component<{}, { shouldSchemeRender: boolean}> {
 
-class SchemeList extends React.Component<Props, {}> {
+    public state = { shouldSchemeRender: false}
 
-    private schemes = schemes;
-
-    // private scheme: Scheme = {
-    //     ageEnd: 13,
-    //     ageStart: 8,
-    //     author: 1,
-    //     category: 2, 
-    //     description: 'Das ist ein Programm mit einer Überschrift und einer dazugehörigen kurzen Beschreibung. Hier steht auch etwas zum  Thema des Programms.',
-    //     id: 1,
-    //     place: 1, 
-    //     placeName: "Wald",
-    //     status: 'published',
-    //     title: 'Das ist ein Programm mit einer Überschrift',
-    // }
+    public componentDidMount() {
+        this.setState({ shouldSchemeRender: true });
+        // setTimeout( () => {
+        //     this.setState({ shouldSchemeRender: true });
+        // }, 1)
+    }
 
     public render() {
-        return <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, max-content)',
-            justifyContent: 'center',
-            justifyItems: 'center',
-            alignItems: 'center'
-            }}>
-
-                <div>Schemes</div>
-                { 
-                    this.schemes.map( (scheme) => {
-                        return <SchemeCard key={scheme.id} scheme={scheme} />
-                    })
-                }
-                {/* <SchemeCard scheme={this.scheme} /> */}
-            </div>;
+        return <PageLayout>
+            <BaseLabel name="Alle Programme" />
+            <BaseHeading level={1}>Finde hier dein nächstes Programm</BaseHeading>
+            <SchemeForm />
+            {this.state.shouldSchemeRender ? <React.Suspense fallback={<div>
+                            Loading...
+                        </div>}>
+                    <ItemGrid>
+                        <SchemeContext.Consumer>
+                            {schemesState => {
+                                return schemesState.data.map(
+                                    scheme => {
+                                        return (
+                                            <SchemeCard
+                                                key={scheme.id}
+                                                scheme={scheme}
+                                            />
+                                        );
+                                    }
+                                );
+                            }}
+                        </SchemeContext.Consumer>
+                    </ItemGrid>
+                </React.Suspense> : <div>Loading...</div>}
+            {/*tslint:disable-next-line:jsx-no-lambda */}
+        </PageLayout>;
     }
 }
 

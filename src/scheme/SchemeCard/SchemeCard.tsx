@@ -1,6 +1,7 @@
-import { BaseButton, BaseHeading, BaseIcon, BaseLabel } from "@dvll/ulight-react";
+import { BaseButton, BaseHeading, BaseIcon, BaseLabel, ThemeContext } from "@dvll/ulight-react";
 import * as React from "react";
-import { Scheme } from "src/scheme";
+import { Link } from "react-router-dom";
+import { Scheme } from "src/store/schemes/types";
 import './SchemeCard.css';
 // import images from './kvmarkt-card-images.png';
 
@@ -17,7 +18,7 @@ const SchemeCard: React.SFC<SchemeCardProps> = (props) => {
         {key: "Ort", icon: 'people', value: placeName || '' },
     ];
 
-    const detailItem = (key: string, value: string | number) => <div className="detail">
+    const detailItem = (key: string, value: string | number) => <div key={key} className="detail">
         {/* icon */}
         <span>{value}</span>
         <BaseLabel style={{ letterSpacing: "normal", fontSize: '0.6rem'}} name={key} />
@@ -48,16 +49,38 @@ const SchemeCard: React.SFC<SchemeCardProps> = (props) => {
     />
 
 
-    return <a className="SchemeCard" key={id}>
-        {Math.random() > 0.7 ? iconToggleButton : iconToggleButtonOff}
-            <BaseHeading level={2} title={title} />
-            <p>{description}</p>
-            {/* images */}
-            { Math.random() > 0.5 ? <div className="images" /> : null}
-            <div className="details">{ detailItems } </div>
-            { badge } 
-        </a>;
+    return (
+        <ThemeContext.Consumer>
+            { theme => {
+                const styles = {
+                    ["--foreground-rgb" as any]: theme.foreground,
+                    ["--secondary-rgb" as any]: theme.secondary,
+                    ["--background-rgb" as any]: theme.background,
+                    // ...style
+                };
+                return( 
+                <Link className="SchemeCard" style={styles} to={`schemes/${id}`} key={id}>
+                    {Math.random() > 0.7 ? iconToggleButton : iconToggleButtonOff}
+                    <BaseHeading level={2} title={title} />
+                    <p>{description}</p>
+                    {/* images */}
+                    { Math.random() > 0.5 ? <div className="images" /> : null}
+                    <div className="details">{ detailItems } </div>
+                    { badge } 
+                </Link>)
+            }}
+        </ThemeContext.Consumer>
+    );
+        // </Link>;
 }
 
-export default SchemeCard;
+export default (React as any).memo(SchemeCard, ({ scheme }: SchemeCardProps, {scheme: nextScheme}: SchemeCardProps) => {
+    return true;
+    // return scheme.id === nextScheme.id &&
+    //     scheme.title === nextScheme.title &&
+    //     scheme.category === nextScheme.category &&
+    //     scheme.place === nextScheme.place &&
+    //     scheme.author === nextScheme.author &&
+    //     scheme.description === nextScheme.description;
+});
 

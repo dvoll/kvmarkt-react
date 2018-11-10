@@ -2,8 +2,25 @@
 // Response object for GET /heroes
 // https://docs.opendota.com/#tag/heroes%2Fpaths%2F~1heroes%2Fget
 export interface Scheme {
-    id: number
-    title: string
+    id: number;
+    title: string;
+    description: string;
+    content?: string;
+    placeName?: string;
+    place: number;
+    place2?: number;
+    place3?: number;
+    authorName?: string;
+    author: number;
+    categoryName?: string;
+    category: number;
+    ageStart: number;
+    ageEnd: number;
+    likeCount?: number;
+    status?: string;
+    created?: Date;
+    updated?: string;
+    isFavorite?: boolean;
 }
 
 // This type is basically shorthand for `{ [key: string]: any }`. Feel free to replace `any` with

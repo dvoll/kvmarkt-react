@@ -17,8 +17,8 @@ export const fetchError = (message: string) =>
 export const addRequest = (data: Scheme) => 
     action(SchemesActionTypes.ADD_REQUEST, data);
 
-export const addSuccess = (data: Scheme) => 
-    action(SchemesActionTypes.ADD_SUCCESS, data);
+export const addSuccess = (internalId: number, serverId: number) => 
+    action(SchemesActionTypes.ADD_SUCCESS, { internalId, serverId });
 
 export const addError = (schemeId: number, msg: string) => 
     action(SchemesActionTypes.ADD_ERROR, {schemeId, msg});
