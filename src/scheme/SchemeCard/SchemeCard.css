@@ -8,13 +8,15 @@
 
 .SchemeCard {
     position: relative;
-    width: 300px;
+    /* width: 300px; */
+    width: 100%;
+    max-width: 350px;
     height: 360px;
     --margin-side: 20px;
     padding: 34px 0 12px 0;
     background: #fff;
     border-radius: 4px;
-    margin: 6px;
+    /* margin: 6px; */
 
     display: flex;
     flex-direction: column;
