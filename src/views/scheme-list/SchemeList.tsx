@@ -5,6 +5,7 @@ import PageLayout from "src/components/layout/PageLayout/PageLayout";
 import SchemeForm from "src/components/SchemeForm/SchemeForm";
 import { SchemeContext } from "src/scheme/scheme-context";
 import SchemeCard from "src/scheme/SchemeCard/SchemeCard";
+import { Scheme } from "src/store/schemes/types";
 // import PageLayout from "src/components/layout/PageLayout/PageLayout";
 // import { Scheme } from "src/scheme";
 // import SchemeCard from "src/scheme/SchemeCard/SchemeCard";
@@ -26,28 +27,22 @@ class SchemeList extends React.Component<{}, { shouldSchemeRender: boolean}> {
             <BaseLabel name="Alle Programme" />
             <BaseHeading level={1}>Finde hier dein nächstes Programm</BaseHeading>
             <SchemeForm />
-            {this.state.shouldSchemeRender ? <React.Suspense fallback={<div>
-                            Loading...
-                        </div>}>
-                    <ItemGrid>
-                        <SchemeContext.Consumer>
-                            {schemesState => {
-                                return schemesState.data.map(
-                                    scheme => {
-                                        return (
-                                            <SchemeCard
-                                                key={scheme.id}
-                                                scheme={scheme}
-                                            />
-                                        );
-                                    }
-                                );
-                            }}
-                        </SchemeContext.Consumer>
-                    </ItemGrid>
-                </React.Suspense> : <div>Loading...</div>}
-            {/*tslint:disable-next-line:jsx-no-lambda */}
+            {this.state.shouldSchemeRender ? 
+                <SchemeContext.Consumer>
+                    {schemesState => {
+                        return  <ItemGrid items={schemesState.data.slice(0, 12)} mapping={this.schemeMapping} />
+                    }}
+                </SchemeContext.Consumer> : null }
         </PageLayout>;
+    }
+
+    private schemeMapping(scheme: Scheme) {
+        return (
+            <SchemeCard
+                key={scheme.id}
+                scheme={scheme}
+            />
+        );
     }
 }
 
