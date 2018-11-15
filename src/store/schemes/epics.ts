@@ -10,10 +10,10 @@ export const schemesRequestEpic: Epic<AnyAction, AnyAction, void> = (
     state
 ) => {
     return action$.pipe(
-        map(action => {
-            console.log(action);
-            return action;
-        }),
+        // map(action => {
+        //     console.log(action);
+        //     return action;
+        // }),
         ofType(SchemesActionTypes.FETCH_REQUEST),
         delay(1000),
         mergeMap(action => from(fetch("./schemes.mock.json")).pipe(
@@ -33,9 +33,11 @@ export const schemesAddEpic: Epic<AnyAction, AnyAction, void> = (
     action$,
     state
 ) => {
-    return action$.pipe( tap(action =>
-            console.log("Action: ", action)
-        ), ofType(SchemesActionTypes.ADD_REQUEST), delay(1000), mergeMap(
+    return action$.pipe( 
+        // tap(action =>
+        //     console.log("Action: ", action)
+        // ), 
+        ofType(SchemesActionTypes.ADD_REQUEST), delay(1000), mergeMap(
             action =>
                 of({ result: { serverId: 1 } }).pipe(
                     // fetch("./schemes.mock.json")

@@ -53,7 +53,6 @@ class NavPane extends React.Component<Props, NavPaneState> {
             <div className="NavPane-dummy" />
             <ThemeContext.Consumer>
                 {theme => {
-                    console.log("theme", theme)
                     return (<nav className={'NavPane-nav ' + (this.state.showDivider ? 'divider' : '')} style={
                         {
                             ["--foreground-rgb" as any]: theme.foreground,
