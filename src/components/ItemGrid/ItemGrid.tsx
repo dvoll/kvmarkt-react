@@ -30,7 +30,7 @@ class ItemGrid extends React.Component<ItemGridProps, {}> {
     }
 
     public shouldComponentUpdate(nextProps: any) {
-        return this.props.items !== nextProps.items;
+        return this.props !== nextProps;
     }
 }
 

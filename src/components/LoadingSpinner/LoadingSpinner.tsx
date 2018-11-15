@@ -7,7 +7,7 @@ export interface LoadingSpinnerProps {
 const LoadingSpinner: React.SFC<LoadingSpinnerProps> = (props) => {
 
     return (
-        <React.Fragment />
+        <div>Loading...</div>
     );
 }
 
