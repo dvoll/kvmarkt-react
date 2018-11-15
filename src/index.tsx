@@ -18,3 +18,28 @@ ReactDOM.render(
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();
+
+
+const db = firebase.firestore();
+
+db.settings({
+    timestampsInSnapshots: true
+});
+
+db.collection("Schemes")
+  .get()
+  .then((querySnapshot: any) => {
+    querySnapshot.forEach((doc: any) => {
+      console.log(`${doc.id}`, doc.data());
+  });
+});
+
+const catRef = db.collection('scheme_categories').doc('1');
+
+db.collection('Schemes')
+  .where('place', '==', catRef.id)  
+  .get()
+  .then( (r: any) => {
+    r.forEach((n: any) => console.log('row', n.data()))
+  })
+  .catch( (err: any) => console.error(err) );
