@@ -4,10 +4,15 @@ import * as ReactDOM from 'react-dom';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
+
+
 import { Provider } from "react-redux";
 import { BrowserRouter } from 'react-router-dom'
 import App from "./App";
 import configureStore from "./configureStore";
+import { firestore } from "./initializeFirebase";
+
+firestore();
 
 ReactDOM.render(
   <BrowserRouter>
@@ -18,3 +23,5 @@ ReactDOM.render(
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();
+
+// fire.initializeApp(firebaseConfig);
