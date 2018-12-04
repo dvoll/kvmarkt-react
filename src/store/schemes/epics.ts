@@ -40,8 +40,8 @@ export const schemesRequestEpic: Epic<AnyAction, AnyAction, void> = (
         ), map((querySnapshot: any) => {
             // firestore.QuerySnapshot
             return querySnapshot.docs.map((r: any) => {
-                const { id, title, description, ageStart, ageEnd, place, category, author } = r.data();
-                const scheme: Scheme = { id, title, place, category, description, ageStart, ageEnd, author };
+                const { id, title, description, content, ageStart, ageEnd, place, category, author } = r.data();
+                const scheme: Scheme = { id, title, place, category, description, content, ageStart, ageEnd, author };
                 return scheme;
             });
         }), map(schemes =>

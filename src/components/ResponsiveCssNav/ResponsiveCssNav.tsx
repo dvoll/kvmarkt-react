@@ -2,53 +2,55 @@ import { ThemeContext } from "@dvll/ulight-react";
 import * as React from "react";
 import { NavLink } from "react-router-dom";
 import { fromEvent, Subscription } from "rxjs";
-import { debounceTime } from "rxjs/operators";
+import { debounceTime, map } from "rxjs/operators";
 
-import './TabBar.css';
+import './ResponsiveCssNav.css';
 
-interface TabBarState {
+interface ResponsiveCssNavState {
     showDivider: boolean;
 }
-export interface TabBarProps {
+export interface  ResponsiveCssNavProps {
     backButton?: boolean;
     navLinks: Array<{ name: string, to: string }>;
 }
 
-class TabBar extends React.Component<TabBarProps, TabBarState> {
-
+class ResponsiveCssNav extends React.Component<ResponsiveCssNavProps, ResponsiveCssNavState> {
+    
     public state = { showDivider: false }
 
-    // private backButton = this.props.backButton && <Link className="TabBar-back" to="/"><span>b</span></Link>
-    private navLinks = this.props.navLinks.map((l) => <NavLink className="TabBar-link" key={l.to} to={l.to}><span>{l.name}</span></NavLink>)
-    // private sideContent = this.props.children && <span className="TabBar-side">props.children</span>;
+    // private backButton = this.props.backButton && <Link className="NavPane-back" to="/"><span>b</span></Link>
+    private navLinks = this.props.navLinks.map((l) => <NavLink className="NavPane-link" key={l.to} to={l.to}><span>{l.name}</span></NavLink>)
+    private sideContent = this.props.children && <span className="NavPane-side">props.children</span>;
 
     private scrollStream = fromEvent(window, 'scroll').pipe(
-        debounceTime(10)
-        // map(() => window.pageYOffset)
+        debounceTime(10),
+        map(() => window.pageYOffset)
     );
 
 
     private scrollSubscription: Subscription;
 
     public componentDidMount() {
-        this.scrollSubscription = this.scrollStream.subscribe(() => {
-            const showDivider = window.innerHeight + window.pageYOffset < document.body.offsetHeight;
+        this.scrollSubscription = this.scrollStream.subscribe((offset) => {
+            const showDivider = offset > 5;
             if (this.state.showDivider !== showDivider) {
                 this.setState({ showDivider })
             }
         });
+        // window.addEventListener('scroll', this.scrollEventHandler);
     }
 
     public componentWillUnmount() {
         this.scrollSubscription.unsubscribe();
+        // window.removeEventListener('scroll', this.scrollEventHandler);
     }
 
     public render() {
         return <React.Fragment>
-            {/* <div className="TabBar-dummy" /> */}
+            <div className="NavPane-dummy" />
             <ThemeContext.Consumer>
                 {theme => {
-                    return (<nav className={'TabBar-nav ' + (this.state.showDivider ? 'divider' : '')} style={
+                    return (<nav className={'NavPane-nav ' + (this.state.showDivider ? 'divider' : '')} style={
                         {
                             ["--foreground-rgb" as any]: theme.foreground,
                             ["--background-rgb" as any]: theme.background,
@@ -56,7 +58,7 @@ class TabBar extends React.Component<TabBarProps, TabBarState> {
                         }}>
                         {/* {this.backButton} */}
                         {this.navLinks}
-                        {/* {this.sideContent} */}
+                        {this.sideContent}
                     </nav>)
                 }
                 }
@@ -65,4 +67,4 @@ class TabBar extends React.Component<TabBarProps, TabBarState> {
     }
 }
 
-export default TabBar;
+export default ResponsiveCssNav;

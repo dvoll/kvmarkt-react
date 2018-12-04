@@ -1,5 +1,11 @@
 .PageLayout {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 5px 5px;
+    padding: 60px 15px;
+}
+
+@media (max-width: 600px) {
+  .PageLayout {
+    padding: 50px 10px;
+  }
 }

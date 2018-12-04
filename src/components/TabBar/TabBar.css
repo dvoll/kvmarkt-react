@@ -1,6 +1,6 @@
 
-.NavPane-nav,
-.NavPane-dummy {
+.TabBar-nav,
+.TabBar-dummy {
     --foreground-rgb: 85, 85, 85;
     --background-rgb: 238, 238, 238;
     --accent-rgb: 187, 0, 0;
@@ -15,40 +15,46 @@
     box-sizing: border-box;
 }
 
-.NavPane-nav {
+.TabBar-nav {
     position: fixed;
     z-index: 50;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     height: var(--nav-height);
+
+    /* margin-right: 0; */
+    /* margin-left: 0; */
+    /* margin-left: calc(100vw - 100%); */
 
     background: var(--background-color);
 
     display: flex;
     flex-direction: row;
     justify-content: start;
-    align-items: center;
+    align-content: stretch;
+
+    top: auto;
+    bottom: 0;
+    justify-content: space-around;
 }
 
-.NavPane-nav.divider {
-    border-bottom: rgba(var(--foreground-rgb), 0.15) 1px solid;
+.TabBar-nav.divider {
+    border-top: rgba(var(--foreground-rgb), 0.15) 1px solid;
 }
 
-.NavPane-dummy {
+.TabBar-dummy {
     display: block;
     width: 100%;
     margin-bottom: var(--nav-height);
 }
 
-.NavPane-link {
-    box-sizing: border-box;
+.TabBar-link {
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: 5px 15px;
     margin: 0 5px;
-    height: 100%;
     text-decoration: none;
     color: var(--foreground-color);
 
@@ -57,31 +63,25 @@
     border-radius: 5px;
 }
 
-.NavPane-title {
-    flex-grow: 1;
-    display: block;
-    text-align: center;
-}
-
-.NavPane-link:focus {
+.TabBar-link:focus {
     border-color: var(--focus-border-color);
     outline: none;
 }
 
-.NavPane-link > span {
+.TabBar-link > span {
     --border-bottom-color: rgba(0,0,0,0);
     /* border: 1px solid rgba(0,0,0,0); */
     padding: 1px 0;
     border-bottom: 1px solid var(--border-bottom-color)
 }
 
-/* .NavPane-link.active > span, */
-.NavPane-link:hover > span
+/* .TabBar-link.active > span, */
+.TabBar-link:hover > span
 {
     --border-bottom-color: var(--foreground-color);
 }
 
-.NavPane-link.active > span {
+.TabBar-link.active > span {
     color: var(--accent-color);
     --border-bottom-color: var(--accent-color);
 }

@@ -4,15 +4,21 @@ import { RouteComponentProps } from "react-router-dom";
 import PageLayout from "src/components/layout/PageLayout/PageLayout";
 import { SchemeContext } from "src/scheme/scheme-context";
 import { Scheme } from "src/store/schemes/types";
+import { WithTitleHandlerProps } from "../dashboard/Dashboard";
 
 export interface SchemeDetailProps {
     schemeId?: number;
 }
 
-class SchemeDetail extends React.Component<SchemeDetailProps & RouteComponentProps<{id: string}> , {}> {
+class SchemeDetail extends React.Component<SchemeDetailProps & RouteComponentProps<{ id: string }> & WithTitleHandlerProps , {}> {
 
-    constructor(props: SchemeDetailProps & RouteComponentProps<{ id: string }>) {
+    constructor(props: SchemeDetailProps & RouteComponentProps<{ id: string }> & WithTitleHandlerProps) {
         super(props);
+    }
+
+    public componentDidMount() {
+        // this.props.titleHandler('');
+        this.props.backButtonEnableHandler(true);
     }
 
     public render() {
@@ -34,7 +40,7 @@ class SchemeDetail extends React.Component<SchemeDetailProps & RouteComponentPro
             <BaseLabel name={scheme.categoryName || ''} />
             <BaseHeading level={2}>{scheme.title}</BaseHeading>
             <p>{scheme.description}</p>
-            <p>{scheme.content}</p>
+            <p dangerouslySetInnerHTML={{'__html': scheme.content || ''}} />
         </div>
     }
 }

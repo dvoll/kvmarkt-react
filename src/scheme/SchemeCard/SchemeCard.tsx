@@ -1,7 +1,6 @@
 import {
     BaseButton,
     BaseHeading,
-    BaseIcon,
     BaseLabel,
     ThemeContext
 } from "@dvll/ulight-react";
@@ -46,31 +45,32 @@ const SchemeCard: React.SFC<SchemeCardProps> = props => {
     );
 
     const detailItems = detailItemList.map(item =>
-        detailItem(item.key, item.value)
+        detailItem(item.key, item.value ? item.value : ' - ')
     );
 
     // const iconToggleButton2 = <BaseButton className="iconToggle" style={{ ["--foreground-rgb" as any]: "242, 242, 242", ["--background-rgb" as any]: "223, 72, 72" }}>
     //     {/* <BaseIcon name='cd' /> */}
     //     <BaseIcon style={{ height: 20, padding: '3px 0', fill: "#f2f2f2" }} iconName="check" />
     // </BaseButton>;
-    const iconToggleButton = (
-        <BaseButton className="iconToggle" icon="cd">
-            {/* <BaseIcon name='cd' /> */}
-            <BaseIcon
-                style={{ height: 20, padding: "2px 0" }}
-                iconName="check"
-            />
-        </BaseButton>
-    );
-    const iconToggleButtonOff = (
-        <BaseButton className="iconToggle">
-            {/* <BaseIcon name='cd' /> */}
-            <BaseIcon style={{ height: 20, padding: "0" }} iconName="cd" />
-        </BaseButton>
-    );
+
+    // const iconToggleButton = (
+    //     <BaseButton className="iconToggle" icon="cd">
+    //         {/* <BaseIcon name='cd' /> */}
+    //         <BaseIcon
+    //             style={{ height: 20, padding: "2px 0" }}
+    //             iconName="check"
+    //         />
+    //     </BaseButton>
+    // );
+    // const iconToggleButtonOff = (
+    //     <BaseButton className="iconToggle">
+    //         {/* <BaseIcon name='cd' /> */}
+    //         <BaseIcon style={{ height: 20, padding: "0" }} iconName="cd" />
+    //     </BaseButton>
+    // );
 
     const badge = (
-        <BaseButton
+        !!categoryName && <BaseButton
             className={`badge category-${category}`}
             // icon="bench"
             style={{
@@ -89,7 +89,7 @@ const SchemeCard: React.SFC<SchemeCardProps> = props => {
 
     const schemeCardContent = (
         <React.Fragment>
-            {Math.random() > 0.7 ? iconToggleButton : iconToggleButtonOff}
+            {/* {Math.random() > 0.7 ? iconToggleButton : iconToggleButtonOff} */}
             <BaseHeading level={2} title={title} />
             <p>{description}</p>
             {/* images */}

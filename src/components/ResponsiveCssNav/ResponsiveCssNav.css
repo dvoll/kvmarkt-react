@@ -28,7 +28,7 @@
     display: flex;
     flex-direction: row;
     justify-content: start;
-    align-items: center;
+    align-content: stretch;
 }
 
 .NavPane-nav.divider {
@@ -42,25 +42,17 @@
 }
 
 .NavPane-link {
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: center;
     padding: 5px 15px;
     margin: 0 5px;
-    height: 100%;
     text-decoration: none;
     color: var(--foreground-color);
 
     --border-color: rgba(0,0,0,0);
     border: 1px solid var(--border-color);
     border-radius: 5px;
-}
-
-.NavPane-title {
-    flex-grow: 1;
-    display: block;
-    text-align: center;
 }
 
 .NavPane-link:focus {
@@ -84,4 +76,16 @@
 .NavPane-link.active > span {
     color: var(--accent-color);
     --border-bottom-color: var(--accent-color);
+}
+
+@media (max-width: 600px) {
+    .NavPane-nav {
+        top: auto;
+        bottom: 0;
+        justify-content: space-around;
+    }
+
+    .NavPane-dummy {
+        display: none;
+    }
 }

@@ -16,8 +16,8 @@ class ItemGrid extends React.Component<ItemGridProps, {}> {
             <div
                 style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill,  minmax(290px, 1fr))",
-                    gridGap: 10,
+                    gridTemplateColumns: "repeat(auto-fill,  minmax(280px, 1fr))",
+                    gridGap: 20,
                     justifyContent: "center",
                     justifyItems: "center",
                     alignItems: "center"
