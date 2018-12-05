@@ -170,15 +170,7 @@ class Dashboard extends React.Component<WithTitleHandlerProps, {}> {
     }
 
     public roundedTitleCard = (item: any) => (
-        <RoundedCard
-            noShadow
-            style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                height: "auto"
-            }}
-        >
+        <RoundedCard noShadow >
             <BaseLabel name={item.subtitle} />
             <BaseHeading level={2}>{item.title}</BaseHeading>
             {/* TODO: Add Actions */}

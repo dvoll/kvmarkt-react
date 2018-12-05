@@ -16,6 +16,7 @@ class RoundedCard extends React.Component<RoundedCardProps, {}> {
         super(props);
     }
 
+    // TODO: Add dark-shadow class with prop
     public render() {
         const style: React.CSSProperties = {
             
