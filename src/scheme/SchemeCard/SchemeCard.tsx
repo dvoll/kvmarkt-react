@@ -5,7 +5,7 @@ import {
     ThemeContext
 } from "@dvll/ulight-react";
 import * as React from "react";
-import { Link } from "react-router-dom";
+import RoundedCard from "src/components/RoundedCard/RoundedCard";
 import { Scheme } from "src/store/schemes/types";
 import "./SchemeCard.css";
 // import images from './kvmarkt-card-images.png';
@@ -13,6 +13,7 @@ import "./SchemeCard.css";
 export interface SchemeCardProps {
     scheme: Scheme;
     placeholder?: boolean;
+    style?: React.CSSProperties;
 }
 
 const SchemeCard: React.SFC<SchemeCardProps> = props => {
@@ -105,19 +106,13 @@ const SchemeCard: React.SFC<SchemeCardProps> = props => {
                 const styles = {
                     ["--foreground-rgb" as any]: theme.foreground,
                     ["--secondary-rgb" as any]: theme.secondary,
-                    ["--background-rgb" as any]: theme.background
-                    // ...style
+                    ["--background-rgb" as any]: theme.background,
+                    ["--background-accent-rgb" as any]: theme.backgroundAccent,
+                    ...props.style
                 };
-                return (
-                    <Link
-                        className="SchemeCard"
-                        style={styles}
-                        to={`schemes/${id}`}
-                        key={id}
-                    >
+                return <RoundedCard className="SchemeCard" style={styles} linkTo={`schemes/${id}`} key={id}>
                         {!props.placeholder ? schemeCardContent : null}
-                    </Link>
-                );
+                    </RoundedCard>;
             }}
         </ThemeContext.Consumer>
     );

@@ -14,7 +14,8 @@
     height: 360px;
     --margin-side: 20px;
     padding: 34px 0 12px 0;
-    background: #fff;
+    background: #f8f8f8;
+    background: rgb(var(--background-accent-rgb));
     border-radius: 4px;
     /* margin: 6px; */
 
