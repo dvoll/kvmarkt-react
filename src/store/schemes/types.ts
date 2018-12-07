@@ -37,7 +37,7 @@ export const enum SchemesActionTypes {
     FETCH_REQUEST = "@@schemes/FETCH_REQUEST",
     FETCH_SUCCESS = "@@schemes/FETCH_SUCCESS",
     FETCH_ERROR = "@@schemes/FETCH_ERROR",
-    FETCH_CANCELED = "@@schemes/FETCH_ERROR",
+    FETCH_CANCELED = "@@schemes/FETCH_CANCELED",
     ADD_REQUEST = "@@schemes/ADD_REQUEST",
     ADD_SUCCESS = "@@schemes/ADD_SUCCESS",
     ADD_ERROR = "@@schemes/ADD_ERROR",

@@ -2,6 +2,7 @@ import { BaseHeading, BaseLabel } from "@dvll/ulight-react";
 import * as React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import PageLayout from "src/components/layout/PageLayout/PageLayout";
+import withTitle from "src/components/layout/PageLayout/withTitleComponent";
 import { SchemeContext } from "src/scheme/scheme-context";
 import { Scheme } from "src/store/schemes/types";
 import { WithTitleHandlerProps } from "../dashboard/Dashboard";
@@ -45,4 +46,4 @@ class SchemeDetail extends React.Component<SchemeDetailProps & RouteComponentPro
     }
 }
 
-export default SchemeDetail;
+export default withTitle('', true)(SchemeDetail);

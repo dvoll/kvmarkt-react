@@ -1,11 +1,12 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, RouteComponentProps, Switch, withRouter } from "react-router";
-import { Dispatch } from "redux";
+import { compose, Dispatch } from "redux";
 import { fromEvent, Subscription } from "rxjs";
 import { debounceTime, map } from "rxjs/operators";
 import { SchemeContext } from "src/scheme/scheme-context";
 import { ApplicationState } from "src/store";
+import { changeTitle } from "src/store/route/actions";
 import * as schemeActions from "src/store/schemes/actions";
 import { SchemesState } from "src/store/schemes/types";
 import Account from "src/views/account/Account";
@@ -26,8 +27,7 @@ interface UserAppState {
 }
 
 class UserApp extends React.Component<
-    { schemeState: SchemesState } & DispatchProps &
-        RouteComponentProps<{ id: string }>,
+    { schemesState: SchemesState } & DispatchProps & RouteComponentProps<{}>,
     UserAppState
 > {
     public state = { title: "", backButtonEnabled: false, mobile: false };
@@ -36,16 +36,16 @@ class UserApp extends React.Component<
 
     private navLinks = [
         { name: "Home", to: "/dashboard" },
-        { name: "Programme", to: "/schemes" }
-        // { name: "Profil", to: "/account" }
+        { name: "Programme", to: "/schemes" },
+        { name: "Profil", to: "/account" }
     ];
     // private setTitleWithContext = this.setTitle.bind(this);
 
     constructor(
-        props: { schemeState: SchemesState } & DispatchProps &
-            RouteComponentProps<{ id: string }>
+        props: { schemesState: SchemesState } & DispatchProps & RouteComponentProps<{}>
     ) {
         super(props);
+        this.props.fetchSchemes();
         this.setTitle = this.setTitle.bind(this);
         this.setBackButtonState = this.setBackButtonState.bind(this);
         const resizeStream = fromEvent(window, "resize").pipe(
@@ -61,13 +61,6 @@ class UserApp extends React.Component<
         window.dispatchEvent(new Event('resize'))    
     }
 
-    public componentDidMount() {
-        this.props.fetchSchemes();
-        this.props.history.listen(location => {
-            this.setState({ backButtonEnabled: false, title: "" });
-        });
-    }
-
     public componentWillUnmount() {
         this.resizeSubscription.unsubscribe();
     }
@@ -81,13 +74,13 @@ class UserApp extends React.Component<
                 desktopNav={<NavPane navLinks={this.navLinks} />}
             /> */}
                 <NavPane
-                    backButton={this.state.backButtonEnabled} // tslint:disable-next-line:jsx-no-lambda
+                    // backButton={this.state.backButtonEnabled} // tslint:disable-next-line:jsx-no-lambda
                     goBackHandler={() => this.props.history.goBack()} // 
-                    title={this.state.title}
+                    // title={this.state.title}
                     navLinks={this.state.mobile ? undefined : this.navLinks}
                 />
                 {/* <TitleContext.Provider value={this.setTitle} > */}
-                <SchemeContext.Provider value={this.props.schemeState}>
+                <SchemeContext.Provider value={this.props.schemesState}>
                     <Switch>
                         <Route
                             path="/dashboard" // tslint:disable-next-line:jsx-no-lambda
@@ -124,6 +117,11 @@ class UserApp extends React.Component<
         );
     }
 
+    public shouldComponentUpdate(nextProps: any) {
+        console.log('userApp Props', nextProps);
+        return true;
+    }
+
     // private setTitleHandlerProp(Component: any) {
     //     return () => <Component titleHandler={this.setTitle} backButtonEnableHandler={this.setBackButtonState} />;
     // }
@@ -157,15 +155,16 @@ class UserApp extends React.Component<
     }
 }
 
-const mapStateToProps = ({ schemeState }: ApplicationState) => ({
-    schemeState
+const mapStateToProps = ({ schemesState }: ApplicationState) => ({
+    schemesState
 })
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-    fetchSchemes: () => dispatch(schemeActions.fetchRequest())
+    fetchSchemes: () => dispatch(schemeActions.fetchRequest()),
+    setTitle: (title: string) => dispatch(changeTitle(title))
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(withRouter(UserApp))
+export default compose(
+    connect(mapStateToProps, mapDispatchToProps),
+    withRouter
+)(UserApp);

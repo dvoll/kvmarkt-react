@@ -1,21 +1,27 @@
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import { changeTitle, disableBackButton, enableBackButton } from "src/store/route/actions";
 
-const withTitle = (Component: any, title: string) => {
-    return class extends React.Component<any, {}> {
+const withTitle = (componentTitle: string, backButtonEnabled: boolean = false) => {
+    return (Component: any) => {
+        const mapDispatchToProps = (dispatch: Dispatch) => ({
+            setTitle: (title: string) => dispatch(changeTitle(title)),
+            enableBackButton: () => dispatch(enableBackButton()),
+            disableBackButton: () => dispatch(disableBackButton()),
+        });
+        const titleHoc =  class extends React.Component<any, {}> {
+            public componentDidMount() {
+                this.props.setTitle(componentTitle);
+                backButtonEnabled ? this.props.enableBackButton() : this.props.disableBackButton();
+            }
 
-        public componentDidMount() {
-            this.props.titleHandler(title);
-        }
-
-        public componentDidUpdate() {
-            this.props.titleHandler(title);
-        }
-
-        public render() {
-            return <Component {...this.props} />;
-        }
-
-    }
+            public render() {
+                return <Component {...this.props} />;
+            }
+        };
+        return connect( null, mapDispatchToProps )(titleHoc);
+    };
 }
 
 export default withTitle;

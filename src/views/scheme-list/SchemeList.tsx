@@ -24,7 +24,7 @@ class SchemeList extends React.Component<WithTitleHandlerProps, { shouldSchemeRe
     public componentDidMount() {
         // const columns = Math.min(window.innerWidth, 1200) / 290;
         this.renderTimeout = setTimeout(() => {
-            this.setState({ shouldSchemeRender: true });
+            // this.setState({ shouldSchemeRender: true });
         });
     }
 
@@ -74,4 +74,4 @@ class SchemeList extends React.Component<WithTitleHandlerProps, { shouldSchemeRe
     }
 }
 
-export default withTitle(SchemeList, 'Alle Programme');
+export default withTitle('Alle Programme')(SchemeList);

@@ -1,6 +1,7 @@
 import { BaseHeading, BaseLabel } from "@dvll/ulight-react";
 import * as React from "react";
 import RoundedCard from "src/components/RoundedCard/RoundedCard";
+import { BlogPost } from "src/store/blogposts/types";
 
 export interface BlogPostCardProps {
     blogpost: BlogPost;
