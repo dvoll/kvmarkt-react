@@ -5,7 +5,7 @@ import { BlogPost } from "src/store/blogposts/types";
 
 export interface BlogPostCardProps {
     blogpost: BlogPost;
-    // style?: React.CSSProperties;
+    style?: React.CSSProperties;
     // className: string;
 }
 
@@ -26,8 +26,8 @@ class BlogPostCard extends React.Component<BlogPostCardProps, {}> {
             backgroundRepeat: 'no-repeat',
             padding: '20px 15px',
             height: '23.125em',
-            maxWidth: '17em'
-            // ...this.props.style
+            maxWidth: '17em',
+            ...this.props.style
         }
         return (
             <RoundedCard style={style} key={blogpost.id} linkTo={'schemes/' + blogpost.id} >
