@@ -1,10 +1,9 @@
 import { AnyAction } from "redux";
 import { Epic, ofType } from "redux-observable";
-import { Observable, of } from "rxjs";
+import { of } from "rxjs";
 import { catchError, delay, map, mergeMap, takeUntil, tap } from "rxjs/operators";
-import { firestore } from "src/initializeFirebase";
 import { addError, addSuccess, fetchError, fetchSuccess } from "./actions";
-import { Scheme, SchemesActionTypes } from "./types";
+import { SchemesActionTypes } from "./types";
 
 export const schemesRequestEpic: Epic<AnyAction, AnyAction, void> = (
     action$,
@@ -16,37 +15,15 @@ export const schemesRequestEpic: Epic<AnyAction, AnyAction, void> = (
         }), 
         ofType(SchemesActionTypes.FETCH_REQUEST), 
         takeUntil(action$.pipe(ofType(SchemesActionTypes.FETCH_CANCELED))),
-        delay(1000), tap(), mergeMap(
-            () => {
-                return Observable.create((observer: any) => {
-                    firestore()
-                        .collection("Schemes")
-                        .onSnapshot({
-                            next: (snapshot: any) => {
-                                observer.next(snapshot);
-                            },
-                            error: (err: any) => {
-                                observer.error(err);
-                            },
-                            complete: () => {
-                                observer.complete();
-                            }
-                        });
-                    return () => {
-                        console.log("remove");
-                    };
-                });
-            }
-        ), map((querySnapshot: any) => {
-            // firestore.QuerySnapshot
-            return querySnapshot.docs.map((r: any) => {
-                const { id, title, description, content, ageStart, ageEnd, place, category, author } = r.data();
-                const scheme: Scheme = { id, title, place, category, description, content, ageStart, ageEnd, author };
-                return scheme;
-            });
-        }), map(schemes =>
-            fetchSuccess(schemes)
-        ), catchError(error => of(fetchError(error))) )
+        delay(1000), tap(), 
+        mergeMap(() => fetch('http://localhost:52833/api/scheme')
+        ), 
+        mergeMap(response => response.json()),
+        // tap((data) => data),
+        map(result =>
+            fetchSuccess(result.result)
+        ),
+        catchError(error => of(fetchError(error))) )
 };
 
 
