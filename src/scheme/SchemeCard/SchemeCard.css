@@ -10,13 +10,15 @@
     position: relative;
     /* width: 300px; */
     width: 100%;
-    max-width: 350px;
-    height: 360px;
+    max-width: 17em;
+    /* height: 360px;  */
+    height: 23em;
+    /* max-width: 20em; */
     --margin-side: 20px;
     padding: 34px 0 12px 0;
-    background: #f8f8f8;
-    background: rgb(var(--background-accent-rgb));
-    border-radius: 4px;
+    /* background: #f8f8f8; */
+    /* /* background: rgb(var(--background-accent-rgb)); *
+    /* border-radius: 4px; */
     /* margin: 6px; */
 
     display: flex;

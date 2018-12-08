@@ -5,19 +5,54 @@
     position: relative;
     box-sizing: border-box;
     /* // backgroundColor: #fff; */
+    background: #f8f8f8;
+    background: rgb(var(--background-accent-rgb));
     border-radius: 10px;
     /* height: 350px; */
+    
     width: 100%;
+    height: 100%;
     min-width: 200px;
-    max-width: 275px;
+    max-width: 22em;
+
+    /* margin: 10px; */
+
     padding: 15px 5px 10px 5px;
     text-decoration: none;
-    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.08)
+    /* box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.08); */
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.05);
 }
 
 .RoundedCard-container.dark-shadow {
-    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.2)
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
 }
+
+.RoundedCard-margin {
+    box-sizing: border-box;
+    width: 100%;
+    /* min-width: 200px;
+    max-width: 22em; */
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* .RoundedCard-container::after {
+    position: absolute;
+    content: '';
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    /* box-shadow: 0px 0px 20px 0px rgba(138, 12, 12, 0.719); *
+} */
+
+/* @media (max-width: 500px) {
+    .RoundedCard-container {
+        max-width: 350px;
+    }
+} */
 
 /* .RoundedCard-container::after {
     content: ' ';

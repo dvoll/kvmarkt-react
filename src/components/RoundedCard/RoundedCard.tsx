@@ -18,11 +18,18 @@ class RoundedCard extends React.Component<RoundedCardProps, {}> {
 
     // TODO: Add dark-shadow class with prop
     public render() {
-        const style: React.CSSProperties = {
-            
-            // margin: '0 10px 5px 10px',
-            ...this.props.style
+        let style: React.CSSProperties = {};
+        let outerStyle: React.CSSProperties = {};
+        if (this.props.style) {
+            const {width, height, ...rest} = this.props.style;
+            outerStyle = {width, height}
+            style = rest;
         }
+        // const style: React.CSSProperties = {
+            
+        //     // margin: '0 10px 5px 10px',
+        //     ...this.props.style
+        // }
         if (this.props.noShadow) {
             style.boxShadow = "none";
         }
@@ -32,7 +39,9 @@ class RoundedCard extends React.Component<RoundedCardProps, {}> {
                 {this.props.children}
             </div>);
         return (
-            element
+            <div className="RoundedCard-margin" style={outerStyle}>
+                {element}
+            </div>
         );
     }
 }

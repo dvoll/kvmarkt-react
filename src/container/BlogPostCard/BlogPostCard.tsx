@@ -25,7 +25,8 @@ class BlogPostCard extends React.Component<BlogPostCardProps, {}> {
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             padding: '20px 15px',
-            height: 350,
+            height: '23.125em',
+            maxWidth: '17em'
             // ...this.props.style
         }
         return (

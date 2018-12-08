@@ -67,56 +67,58 @@ class Dashboard extends React.Component<WithTitleHandlerProps & { blogPostsState
     public render() {
         const blogPosts = this.props.blogPostsState.data;
         const dashboardSchemes = this.props.schemesState.data.slice(0, 3);
-        return (
-            <PageLayout className="Dashboard">
-                <BaseLabel name="Dashboard" />
-                <BaseHeading level={1}>Hallo, Max</BaseHeading>
-                <FlexItemRow>
-                    {this.roundedTitleCard(this.dashboardItems[0])}
-                    {blogPosts.map(item => (
-                        <BlogPostCard key={item.id} blogpost={item} />
-                    ))}
-                </FlexItemRow>
-                <FlexItemRow style={{ ["--row-height" as any]: 350 }}>
-                    {this.roundedTitleCard(this.dashboardItems[1])}
-                    {dashboardSchemes.map(item => (
-                        <SchemeCard
-                            key={item.id}
-                            scheme={item}
-                            style={{ margin: 0, borderRadius: 10, height: 350 }}
-                        />
-                    ))}
-                </FlexItemRow>
-                <br />
-                <BaseLink to="/schemes">
-                    <BaseIcon style={{ height: 13 }} iconName="gear" />
-                    <span>Link</span>
-                </BaseLink>
-                <br />
-                <BaseLink to="/schemes">
-                    <BaseIcon style={{ height: 13 }} iconName="lock" />
-                    <span>Link</span>
-                </BaseLink>
-                <br />
-                <br />
-                <BaseLink to="/schemes">
-                    <BaseIcon style={{ height: 13 }} iconName="arrow-right" />
-                    <span>Neues Programm</span>
-                </BaseLink>
-                <br />
-                <BaseLink to="/schemes">
-                    <BaseIcon style={{ height: 13 }} iconName="arrow-right" />
-                    <span>Alle Programme</span>
-                </BaseLink>
-                <br />
-                <BaseButton title="Speichern und veröffentlichen" icon="gear" />
-                <BaseButton title="Speichern und veröffentlichen" icon="gear">
-                    Speichern und veröffentlichen
-                </BaseButton>
-                <BaseLabel name="Label" />
-                <BaseButton title="Speichern und veröffentlichen" icon="lock" />
-            </PageLayout>
-        );
+        return <PageLayout className="Dashboard">
+            <BaseLabel name="Dashboard" />
+            <BaseHeading level={1}>Hallo, Max</BaseHeading>
+            <FlexItemRow style={{ ["--row-height" as any]: "23.125em" }}>
+                {this.roundedTitleCard(this.dashboardItems[0])}
+                {blogPosts.map(item => (
+                    <BlogPostCard key={item.id} blogpost={item} style={{ height: "23.125em"}} />
+                ))}
+            </FlexItemRow>
+            <FlexItemRow style={{ ["--row-height" as any]: "23.125em" }}>
+                {this.roundedTitleCard(this.dashboardItems[1])}
+                {dashboardSchemes.map(item => (
+                    <SchemeCard
+                        key={item.id}
+                        scheme={item}
+                        style={{
+                            margin: 0,
+                            borderRadius: 10,
+                            height: "23.125em"
+                        }}
+                    />
+                ))}
+            </FlexItemRow>
+            <br />
+            <BaseLink to="/schemes">
+                <BaseIcon style={{ height: 13 }} iconName="gear" />
+                <span>Link</span>
+            </BaseLink>
+            <br />
+            <BaseLink to="/schemes">
+                <BaseIcon style={{ height: 13 }} iconName="lock" />
+                <span>Link</span>
+            </BaseLink>
+            <br />
+            <br />
+            <BaseLink to="/schemes">
+                <BaseIcon style={{ height: 13 }} iconName="arrow-right" />
+                <span>Neues Programm</span>
+            </BaseLink>
+            <br />
+            <BaseLink to="/schemes">
+                <BaseIcon style={{ height: 13 }} iconName="arrow-right" />
+                <span>Alle Programme</span>
+            </BaseLink>
+            <br />
+            <BaseButton title="Speichern und veröffentlichen" icon="gear" />
+            <BaseButton title="Speichern und veröffentlichen" icon="gear">
+                Speichern und veröffentlichen
+            </BaseButton>
+            <BaseLabel name="Label" />
+            <BaseButton title="Speichern und veröffentlichen" icon="lock" />
+        </PageLayout>;
     }
 
     public roundedTitleCard = (item: any) => (
