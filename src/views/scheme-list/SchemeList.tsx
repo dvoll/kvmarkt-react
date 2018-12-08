@@ -3,6 +3,7 @@ import * as React from "react";
 import ItemGrid from "src/components/ItemGrid/ItemGrid";
 import PageLayout from "src/components/layout/PageLayout/PageLayout";
 import withTitle from "src/components/layout/PageLayout/withTitleComponent";
+import SchemeForm from "src/container/SchemeForm/SchemeForm";
 import { SchemeContext } from "src/scheme/scheme-context";
 import SchemeCard from "src/scheme/SchemeCard/SchemeCard";
 import { Scheme } from "src/store/schemes/types";
@@ -49,6 +50,7 @@ class SchemeList extends React.Component<WithTitleHandlerProps, { shouldSchemeRe
                 {/* <SchemeForm /> */}
                 {/* <SchemeFilterBar  /> */}
                 {/* {this.state.shouldSchemeRender ?  */} 
+                <SchemeForm />
                 <SchemeContext.Consumer>
                     {schemesState => {
                         return (

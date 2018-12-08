@@ -6,7 +6,7 @@ import { catchError, delay, map, mergeMap, takeUntil, tap } from "rxjs/operators
 
 
 
-import { of } from "rxjs";
+import { from, of } from "rxjs";
 import { loginError, loginSuccess } from "./actions";
 import { Auth, AuthActionTypes } from "./types";
 
@@ -20,15 +20,49 @@ export const authLoginEpic: Epic<AnyAction, AnyAction, void> = (
         ofType(AuthActionTypes.LOGIN_REQUEST),
         takeUntil(action$.pipe(ofType(AuthActionTypes.LOGIN_CANCELED))),
         delay(1000), tap(), mergeMap(
-            () => {
-                const data: Auth = {
-                    authenticated: true,
-                    userId: 1,
-                    tokenId: '2',
+            (action) => {
+                const loginAction = action.payload;
+                const creds = {
+                    Email: loginAction.username,
+                    Password: loginAction.password,
                 }
-                return of(data)
+                // const da = action.pay
+                // const data: Auth = {
+                //     authenticated: true,
+                //     userId: 1,
+                //     tokenId: '2',
+                // }
+                // return of(data)
+                return from(
+                    fetch("http://localhost:52833/api/account/login", {
+                        method: 'POST',
+                        mode: 'cors',
+                        headers: {
+                            "Content-Type": "application/json; charset=utf-8",
+                        },
+                        body: JSON.stringify(creds)
+                    }).then(response => response.json())
+                ).pipe(
+                    map(response => response.result),
+                    map(data => {
+                        const payload: Auth = {
+                            authenticated: true,
+                            tokenId: data.token,
+                            contributor: { 
+                                id: data.id,
+                                firstname: data.firstname,
+                                lastname: data.lastname,
+                                email: data.email,
+                            }
+                        }
+                        return loginSuccess(payload)
+                    }),
+                    catchError(error => of (loginError(error)))
+                );
             }
-        ), map(data =>
-            loginSuccess(data)
-        ), catchError(error => of(loginError(error))))
+        ),
+    ) 
+        // map(data =>
+        //     loginSuccess(data)
+        // ), catchError(error => of(loginError(error))))
 };

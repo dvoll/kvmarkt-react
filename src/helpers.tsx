@@ -6,5 +6,5 @@ export const privateRoute = (Component: any, accessGranted: boolean, path: strin
         // tslint:disable-next-line:jsx-no-lambda
         return <Route path={path} component={Component} />
     }
-    return <Redirect to='login' />
+    return <Redirect to='/login' />
 }

@@ -1,6 +1,6 @@
 import { AnyAction } from "redux";
 import { Epic, ofType } from "redux-observable";
-import { of } from "rxjs";
+import { from, of } from "rxjs";
 import { catchError, delay, map, mergeMap, takeUntil, tap } from "rxjs/operators";
 import { addError, addSuccess, fetchError, fetchSuccess } from "./actions";
 import { SchemesActionTypes } from "./types";
@@ -16,14 +16,22 @@ export const schemesRequestEpic: Epic<AnyAction, AnyAction, void> = (
         ofType(SchemesActionTypes.FETCH_REQUEST), 
         takeUntil(action$.pipe(ofType(SchemesActionTypes.FETCH_CANCELED))),
         delay(1000), tap(), 
-        mergeMap(() => fetch('http://localhost:52833/api/scheme')
-        ), 
-        mergeMap(response => response.json()),
+        // TODO: Get URL and token from store
+        mergeMap(() => {
+            return from(
+                fetch('http://localhost:52833/api/scheme', {
+                    headers: { 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkYXJpb3ZvbGwra3ZtYXJrdHRlc3RAZ21haWwuY29tIiwianRpIjoiMDMwZDllMTMtMjY3MS00ZjUzLWEyMjQtZmYxM2I0YzVlNGRmIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIwNjAxMjY0YS0zNzc2LTRiOWQtOWJiNi0yMzkyZTA2OTg1YWYiLCJleHAiOjE1NDY4OTE3ODEsImlzcyI6ImxvY2FsaG9zdCIsImF1ZCI6ImxvY2FsaG9zdCJ9.VPwhA-aU6VEYVgtH6Jcq_gHicILtLUqTq75G_1pTSDk'}
+                })
+                .then(response => response.json())).pipe(
+                    map(result =>
+                        fetchSuccess(result.result)
+                    ),
+                    catchError(error => of(fetchError(error)))
+                )
+        }), 
+        // mergeMap(response => response.json()),
         // tap((data) => data),
-        map(result =>
-            fetchSuccess(result.result)
-        ),
-        catchError(error => of(fetchError(error))) )
+         )
 };
 
 

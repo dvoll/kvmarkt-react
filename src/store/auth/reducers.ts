@@ -4,7 +4,7 @@ import { AuthActionTypes, AuthState } from "./types";
 
 export const initialState: AuthState = {
     data: {
-        authenticated: false
+        authenticated: true
     },
     errors: undefined,
     loading: false
@@ -16,7 +16,7 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
     //
     switch (action.type) {
         case AuthActionTypes.LOGIN_REQUEST: {
-            return { ...state, loading: true };
+            return { ...state, loading: true, errors: undefined };
         }
         case AuthActionTypes.LOGIN_CANCELED: {
             return { ...state, loading: false };

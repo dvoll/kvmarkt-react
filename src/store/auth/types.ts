@@ -3,7 +3,16 @@ export interface Auth {
     authenticated: boolean;
     userId?: number;
     tokenId?: string;
+    readonly contributor?: Contributor;
 } 
+
+export interface Contributor {
+    id: number;
+    firstname: string;
+    lastname: string;
+    association?: any;
+    email: string;
+}
 
 export const enum AuthActionTypes {
     LOGIN_REQUEST = "@@auth/LOGIN_REQUEST",

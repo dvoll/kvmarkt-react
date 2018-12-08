@@ -8,10 +8,11 @@ import { login } from "src/store/auth/actions";
 import { AuthState } from "src/store/auth/types";
 
 interface State {
-    time: Date;
+    username: string;
+    password: string;
 }
 interface Props {
-    login: () => void;
+    login: (username: string, password: string) => void;
     authState: AuthState
 }
 
@@ -19,28 +20,43 @@ class Login extends React.Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.state = { time: new Date()};
+        this.state = { password: '', username: ''};
         // this.props.login(); 
+        this.handleEmailChange = this.handleEmailChange.bind(this);
+        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    }
+
+    public handleEmailChange(event: any) {
+        this.setState({username: event.target.value})
+    }
+    public handlePasswordChange(event: any) {
+        this.setState({password: event.target.value})
     }
 
     public render() {
-        return (
-            <div>LOGIN
+        return <div>
+                LOGIN
+                <br />
+                Email
+                <input type="text" onInput={this.handleEmailChange} />
+                <br />
+                password
+                <input type="text" onInput={this.handlePasswordChange} />
+                <br />
                 {/* tslint:disable-next-line:jsx-no-lambda */}
-                <BaseButton title="Login" onClick={() => this.props.login()} />
+                <BaseButton title="Login" onClick={() => this.props.login(this.state.username, this.state.password)} />
                 <br />
-                <Link to="/dashboard" >Dashboard </Link>
+                <Link to="/dashboard">Dashboard </Link>
                 <br />
-                Logged in: {this.props.authState.data.authenticated ? 'yes' : 'no'}
+                Logged in: {this.props.authState.data.authenticated ? "yes" : "no"}
                 <br />
-                { this.props.authState.loading && 'Loading'}
-            </div>
-            );
+                {this.props.authState.loading && "Loading"}
+            </div>;
         }
     }
     
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-    login: () => dispatch(login())
+    login: (username: string, password: string) => dispatch(login(username, password))
 });
 
 const mapStateToProps = ({ authState }: ApplicationState) => ({
