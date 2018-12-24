@@ -13,6 +13,7 @@ import Account from "src/views/account/Account";
 import Dashboard from "src/views/dashboard/Dashboard";
 import SchemeList from "src/views/scheme-list/SchemeList";
 import SchemeDetail from "src/views/SchemeDetail/SchemeDetail";
+import SchemeFormPage from "src/views/SchemeFormPage/SchemeFormPage";
 import NavPane from "../NavPane/NavPane";
 import TabBar from "../TabBar/TabBar";
 
@@ -93,6 +94,10 @@ class UserApp extends React.Component<
                             exact // tslint:disable-next-line:jsx-no-lambda
                             render={props =>
                                 this.setChildrenPageProps(SchemeList, props)
+                            }
+                        />
+                        <Route path="/schemes/new" render={props =>
+                                this.setChildrenPageProps(SchemeFormPage, props)
                             }
                         />
                         <Route

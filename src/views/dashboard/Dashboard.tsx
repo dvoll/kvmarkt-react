@@ -38,6 +38,7 @@ class Dashboard extends React.Component<WithTitleHandlerProps & { blogPostsState
             // items: this.blogPosts,
             actions: [
                 {
+                    id: 1,
                     type: "internalLink",
                     text: "Alle Beiträge lesen",
                     to: "admin"
@@ -51,13 +52,15 @@ class Dashboard extends React.Component<WithTitleHandlerProps & { blogPostsState
             // items: this.blogPosts,
             actions: [
                 {
+                    id: 1,
                     type: "internalLink",
                     text: "Alle Programme",
                     to: "schemes"
                 },
                 {
+                    id: 1,
                     type: "internalLink",
-                    text: "Alle Programme",
+                    text: "Programm hinzufügen",
                     to: "schemes/new"
                 }
             ]
@@ -126,6 +129,12 @@ class Dashboard extends React.Component<WithTitleHandlerProps & { blogPostsState
             <BaseLabel name={item.subtitle} />
             <BaseHeading level={2}>{item.title}</BaseHeading>
             {/* TODO: Add Actions */}
+            {item.actions.map((action: any) => {
+                return <BaseLink key={action.id} to={action.to} >
+                    <BaseIcon style={{ height: 16 }} iconName="arrow-right" />
+                    <span>{action.text}</span>
+                </BaseLink>
+            }) }
         </RoundedCard>
     );
 

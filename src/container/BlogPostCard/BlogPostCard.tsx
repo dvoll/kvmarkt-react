@@ -18,6 +18,8 @@ class BlogPostCard extends React.Component<BlogPostCardProps, {}> {
     public render() {
         const { blogpost } = {...this.props};
         const style: React.CSSProperties = {
+            display: 'flex',
+            flexDirection: 'column',
             boxSizing: 'border-box',
             backgroundColor: 'rgb(255, 232, 191)',
             backgroundImage: `url('${blogpost.imageUrl}')`,
