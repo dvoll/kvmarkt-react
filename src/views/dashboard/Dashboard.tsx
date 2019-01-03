@@ -58,7 +58,7 @@ class Dashboard extends React.Component<WithTitleHandlerProps & { blogPostsState
                     to: "schemes"
                 },
                 {
-                    id: 1,
+                    id: 2,
                     type: "internalLink",
                     text: "Programm hinzufügen",
                     to: "schemes/new"
