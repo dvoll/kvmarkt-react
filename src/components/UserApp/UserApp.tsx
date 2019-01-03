@@ -123,7 +123,7 @@ class UserApp extends React.Component<
     }
 
     public shouldComponentUpdate(nextProps: any) {
-        console.log('userApp Props', nextProps);
+        // console.log('userApp Props', nextProps);
         return true;
     }
 
