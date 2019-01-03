@@ -1,15 +1,20 @@
-import { BaseFormLabel, BaseHeading, BaseInput, ThemeContext } from "@dvll/ulight-react";
+import { BaseButton, BaseFormLabel, BaseHeading, BaseInput, ThemeContext } from "@dvll/ulight-react";
 import * as React from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import DynamicFormField, { DynamicFormInputTypes } from "src/components/DynamicFormField/DynamicFormField";
 import PageLayout from "src/components/layout/PageLayout/PageLayout";
 import RoundedCard from "src/components/RoundedCard/RoundedCard";
 import SchemeTextEditor from "src/container/SchemeTextEditor/SchemeTextEditor";
+import { ApplicationState } from "src/store";
+import CategoryStateObject, { SchemeCategory } from "src/store/scheme-categories/index.generic";
 
 interface SchemeFormPageState {
     title: string;
 }
-export interface  SchemeFormPageProps {
-    time?: Date;
+export interface SchemeFormPageProps {
+    categories?: SchemeCategory[],
+    loadCategories?: () => any
 }
 
 
@@ -43,6 +48,7 @@ class SchemeFormPage extends React.Component<SchemeFormPageProps, SchemeFormPage
         //     ]
         // };
         return <PageLayout>
+            <BaseButton onClick={this.props.loadCategories}>Load Categories</BaseButton>
             <form onSubmit={this.submitForm} >
                 <ThemeContext.Consumer>
                     {theme => {
@@ -64,7 +70,7 @@ class SchemeFormPage extends React.Component<SchemeFormPageProps, SchemeFormPage
                             </BaseHeading>
                             <BaseFormLabel htmlFor='title'>Überschrift</BaseFormLabel>
                             <BaseInput type="text" name="title" />
-                            <DynamicFormField type={DynamicFormInputTypes.TEXT} labelName="Überschrift #d"  />
+                            <DynamicFormField type={DynamicFormInputTypes.TEXT} labelname="Überschrift #d"  />
                             <BaseFormLabel htmlFor='category'>Kategorie</BaseFormLabel>
                             <select defaultValue='0'>
                                 <option value={0}>Auswählen...</option>
@@ -72,7 +78,7 @@ class SchemeFormPage extends React.Component<SchemeFormPageProps, SchemeFormPage
                                 <option value={2}>Quiz</option>
                                 <option value={3}>Bibelarbeit</option>
                             </select>
-                            <DynamicFormField type={DynamicFormInputTypes.SELECT} labelName="Kategorie #d" items={[
+                            <DynamicFormField type={DynamicFormInputTypes.SELECT} labelname="Kategorie #d" items={[
                                 {value: 0, name: 'Auswählen...'},
                                 {value: 1, name: 'Geländespiel'},
                                 {value: 2, name: 'Quiz'},
@@ -90,7 +96,7 @@ class SchemeFormPage extends React.Component<SchemeFormPageProps, SchemeFormPage
                     </React.Fragment>;
                     }}
                 </ThemeContext.Consumer>
-            </form>;
+            </form>
         </PageLayout>
     }
 
@@ -99,4 +105,14 @@ class SchemeFormPage extends React.Component<SchemeFormPageProps, SchemeFormPage
     }
 }
 
-export default SchemeFormPage;
+const mapStateToProps = ({categoriesState}: ApplicationState) => {
+    return {categories: categoriesState.data}
+}
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return {
+        loadCategories: () => dispatch(CategoryStateObject.fetchRequest())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SchemeFormPage);

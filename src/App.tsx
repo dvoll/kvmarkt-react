@@ -6,9 +6,9 @@ import { Route, RouteComponentProps, Switch, withRouter } from "react-router-dom
 import { compose } from "redux";
 import "./App.css";
 import UserApp from "./components/UserApp/UserApp";
-import { privateRoute } from "./helpers";
 import { ApplicationState } from "./store";
 import { AuthState } from "./store/auth/types";
+import { privateRoute } from "./utils";
 import Dashboard from "./views/dashboard/Dashboard";
 import Login from "./views/login/Login";
 // import logo from "./logo.svg";

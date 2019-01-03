@@ -20,7 +20,7 @@ export interface DynamicFormFieldProps {
     //         | React.SelectHTMLAttributes<HTMLSelectElement>
     //         | React.TextareaHTMLAttributes<HTMLTextAreaElement>
     //     , HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement >;
-    labelName: string;
+    labelname: string;
 }
 
 export type DynFormTypes =
@@ -59,7 +59,7 @@ const DynamicFormField: React.SFC<DynFormTypes> = (props) => {
 
     return (
         <React.Fragment>
-            <BaseFormLabel>{props.labelName}</BaseFormLabel>
+            <BaseFormLabel>{props.labelname}</BaseFormLabel>
             {element}
         </React.Fragment>
     );

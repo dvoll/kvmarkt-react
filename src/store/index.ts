@@ -4,14 +4,18 @@ import { Action, AnyAction, combineReducers, Dispatch } from 'redux'
 
 import { schemesReducer } from "./schemes/reducers";
 
-import { combineEpics } from 'redux-observable';
+import { combineEpics, Epic } from 'redux-observable';
+import { ignoreElements, tap } from 'rxjs/operators';
+import { KvMarktApiSimpleElementFetchEpic } from 'src/utils';
 import { authLoginEpic } from './auth/epics';
 import { authReducer } from './auth/reducers';
 import { AuthState } from './auth/types';
 import { blogPostsReducer } from './blogposts/reducers';
 import { BlogPostsState } from './blogposts/types';
+import { FetchDataTypeState } from './generic/index.class';
 import { routeReducer } from './route/reducers';
 import { RouteState } from './route/types';
+import CategoryStateObject, { SchemeCategory } from './scheme-categories/index.generic';
 import { schemesAddEpic, schemesRequestEpic } from './schemes/epics';
 import { SchemesState } from "./schemes/types";
 
@@ -24,6 +28,7 @@ export interface ApplicationState {
     blogPostsState: BlogPostsState,
     authState: AuthState,
     routeState: RouteState,
+    categoriesState: FetchDataTypeState<SchemeCategory>,
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property
@@ -33,13 +38,26 @@ export const rootReducer = combineReducers<ApplicationState>({
     schemesState: schemesReducer,
     blogPostsState: blogPostsReducer,
     authState: authReducer,
-    routeState: routeReducer
+    routeState: routeReducer,
+    categoriesState: CategoryStateObject.reducer
 })
 
+const loggerEpic: Epic<AnyAction, AnyAction, void> = (
+    action$,
+    state
+) => {
+    return action$.pipe(
+        tap( action => console.log("Action: ", action.type) ),
+        ignoreElements(), 
+    )
+};
+
 export const rootEpic = combineEpics(
+    loggerEpic,
     schemesRequestEpic,
     schemesAddEpic,
-    authLoginEpic
+    authLoginEpic,
+    KvMarktApiSimpleElementFetchEpic('category', CategoryStateObject),
 );
 
 export interface ConnectedReduxProps<A extends Action = AnyAction> {
