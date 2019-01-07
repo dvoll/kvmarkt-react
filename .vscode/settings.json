@@ -1,4 +1,7 @@
 {
     "liveServer.settings.root": "/build",
-    "liveServer.settings.port": 5500
+    "liveServer.settings.port": 5500,
+
+    "editor.formatOnSave": true,
+    "tslint.autoFixOnSave": true
 }
