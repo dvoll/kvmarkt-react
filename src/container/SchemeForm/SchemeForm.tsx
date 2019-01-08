@@ -1,13 +1,15 @@
-import { BaseHeading, Select, SelectOption, ThemeContext, withUlightTheme } from '@dvll/ulight-react';
+import { BaseHeading, BaseInput, Select, SelectOption, ThemeContext, withUlightTheme } from '@dvll/ulight-react';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import DynamicFormField, { DynamicFormInputTypes } from 'src/components/DynamicFormField/DynamicFormField';
+import { DynamicFormInputTypes } from 'src/components/DynamicFormField/DynamicFormField';
+import FormField from 'src/components/DynamicFormField/FormField';
 import RoundedCard from 'src/components/RoundedCard/RoundedCard';
 import { ApplicationState } from 'src/store';
+import { FetchDataTypeState } from 'src/store/generic/index.class';
 import { SchemeCategory } from 'src/store/scheme-categories/index.generic';
 import { addRequest, fetchRequest } from 'src/store/schemes/actions';
-import { Scheme, SchemesState } from 'src/store/schemes/types';
+import { Scheme } from 'src/store/schemes/types';
 import SchemeTextEditor from '../SchemeTextEditor/SchemeTextEditor';
 
 interface SchemeFormState extends Scheme {
@@ -21,8 +23,9 @@ interface DispatchProps {
 
 interface SchemeFormProps extends DispatchProps {
     scheme?: Scheme;
-    categories?: SchemeCategory[];
+    // categories?: SchemeCategory[];
     submitForm: (scheme: Scheme) => void;
+    categoriesState: FetchDataTypeState<SchemeCategory>;
 }
 
 enum InputFieldNames {
@@ -44,6 +47,8 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
         place: 1,
         places: ['1'],
     };
+
+    private UlightCard = withUlightTheme(RoundedCard);
 
     constructor(props: SchemeFormProps) {
         super(props);
@@ -67,53 +72,7 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
 
     public render() {
         const { category, places, title } = this.state;
-        const titleInput = ( //                             </BaseFormLabel > //     Überschrift // <BaseFormLabel htmlFor = "title" >
-            // <BaseInput
-            //     key="input12"
-            //     type="text"
-            //     name="title"
-            //     value={title}
-            //     onChange={this.handleFormInput}
-            //     id={InputFieldNames.TITLE}
-            // />
-            <DynamicFormField
-                id={InputFieldNames.TITLE}
-                type={DynamicFormInputTypes.TEXT}
-                value={title}
-                onChange={this.handleFormInput}
-                labelname="Überschrift #d"
-            />
-        );
 
-        const categorySelect = (
-            <Select
-                id={InputFieldNames.CATEGORY}
-                name="category"
-                value={category}
-                /* tslint:disable-next-line:jsx-no-lambda */ onChange={this.handleFormInput}
-            >
-                <SelectOption value={4}>Geländespiel</SelectOption>
-                <SelectOption value={1}>Bibelarbeit</SelectOption>
-                <SelectOption value={3}>Dorfspiel</SelectOption>
-            </Select>
-        );
-        const placeSelect = (
-            <Select
-                id={InputFieldNames.PLACES}
-                multiple={true}
-                name="places"
-                value={places || ['3']}
-                /* tslint:disable-next-line:jsx-no-lambda */ onChange={this.handleFormInput}
-            >
-                <SelectOption value={3}>Garten</SelectOption>
-                <SelectOption value={2}>großer Raum</SelectOption>
-                <SelectOption value={1}>Sporthalle</SelectOption>
-            </Select>
-        );
-
-        const textEditor = <SchemeTextEditor text="<h1>Eine Überschrift</h1>" />;
-
-        const UlightCard = withUlightTheme(RoundedCard);
         return (
             <form onSubmit={this.handleSubmit}>
                 <ThemeContext.Consumer>
@@ -121,7 +80,7 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
                         const accentColor = `rgba(${theme.accent}, 1)`;
                         return (
                             <React.Fragment>
-                                <RoundedCard
+                                <this.UlightCard
                                     name="rounded01"
                                     key="rounded01"
                                     style={{
@@ -134,21 +93,82 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
                                         <span style={{ color: accentColor }}>1.</span> Infos
                                     </BaseHeading>
 
-                                    {titleInput}
-                                    {categorySelect}
-                                    {placeSelect}
-                                </RoundedCard>
-                                <UlightCard style={{}} key="rounded02">
+                                    {this.titleInput(title)}
+                                    {this.categorySelect(this.props.categoriesState, category)}
+                                    {this.placeSelect(places)}
+                                </this.UlightCard>
+                                <this.UlightCard style={{}} key="rounded02">
                                     <BaseHeading level={1}>
                                         <span style={{ color: accentColor }}>2.</span> Inhalt
                                     </BaseHeading>
-                                    {textEditor}
-                                </UlightCard>
+                                    {this.textEditor()}
+                                </this.UlightCard>
                             </React.Fragment>
                         );
                     }}
                 </ThemeContext.Consumer>
             </form>
+        );
+    }
+
+    private textEditor() {
+        return <SchemeTextEditor text="<h1>Eine Überschrift</h1>" />;
+    }
+
+    private categorySelect(categoriesState: FetchDataTypeState<SchemeCategory>, value: number) {
+        return (
+            <FormField labelName="Kategorie">
+                {categoriesState.loading ? (
+                    <span>lädt...</span>
+                ) : (
+                    <Select
+                        key={InputFieldNames.CATEGORY}
+                        id={InputFieldNames.CATEGORY}
+                        name="category"
+                        value={value}
+                        /* tslint:disable-next-line:jsx-no-lambda */ onChange={this.handleFormInput}
+                    >
+                        {categoriesState.data.map(item => (
+                            <SelectOption key={'category' + item.id} value={item.id}>
+                                {item.name}
+                            </SelectOption>
+                        ))}
+                    </Select>
+                )}
+            </FormField>
+        );
+    }
+    private placeSelect(places: string[]) {
+        return (
+            <FormField labelName="Orte">
+                <Select
+                    id={InputFieldNames.PLACES}
+                    multiple={true}
+                    name="places"
+                    value={places}
+                    /* tslint:disable-next-line:jsx-no-lambda */ onChange={this.handleFormInput}
+                >
+                    <SelectOption value={3}>Garten</SelectOption>
+                    <SelectOption value={2}>großer Raum</SelectOption>
+                    <SelectOption value={1}>Sporthalle</SelectOption>
+                </Select>
+            </FormField>
+        );
+    }
+
+    private titleInput(title: string) {
+        return (
+            // <BaseInput //                             </BaseFormLabel > //     Überschrift // <BaseFormLabel htmlFor = "title" >
+            //     key="input12"
+            //     type="text"
+            //     name="title"
+            //     value={title}
+            //     onChange={this.handleFormInput}
+            //     id={InputFieldNames.TITLE}
+            // />
+            <FormField labelName="Überschrift" id={InputFieldNames.TITLE}>
+                <BaseInput type={DynamicFormInputTypes.TEXT} value={title} onChange={this.handleFormInput} />
+            </FormField>
         );
     }
 
@@ -162,9 +182,9 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
                 this.setState({ title: '' + event.target.value });
                 break;
             case InputFieldNames.CATEGORY:
-                const category = +(event.target.value as string) || -1;
-                this.setState({ category });
-                // categoryName: this.props.categories[+value].name,
+                const category = +(event.target.value as string | number);
+                this.setState({ category, categoryName: this.props.categoriesState.data[category].name });
+                // ,
                 break;
             case InputFieldNames.PLACES:
                 const tar = event.target as any;
@@ -181,7 +201,9 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
 // It's usually good practice to only include one context at a time in a connected component.
 // Although if necessary, you can always include multiple contexts. Just make sure to
 // separate them from each other to prevent prop conflicts.
-const mapStateToProps = ({ schemesState }: ApplicationState) => ({} as SchemesState);
+const mapStateToProps = ({ categoriesState }: ApplicationState) => ({
+    categoriesState,
+});
 
 // mapDispatchToProps is especially useful for constraining our actions to the connected component.
 // You can access these via `this.props`.
