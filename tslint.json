@@ -1,22 +1,15 @@
 {
-  "extends": [
-    "tslint:recommended",
-    "tslint-react",
-    "tslint-config-prettier"
-  ],
-  "linterOptions": {
-    "exclude": [
-      "config/**/*.js",
-      "node_modules/**/*.ts",
-      "coverage/lcov-report/*.js"
-    ]
-  },
-  "rules": {
-    // "defaultSeverity": "warning",
-    "interface-name": false,
-    "jsx-boolean-value": false,
-    "no-console": false,
-    "object-literal-sort-keys": false
-  },
-  "defaultSeverity": "warning"
+    "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
+    "linterOptions": {
+        "exclude": ["config/**/*.js", "node_modules/**/*.ts", "coverage/lcov-report/*.js"]
+    },
+    "rules": {
+        // "defaultSeverity": "warning",
+        "interface-name": false,
+        "jsx-boolean-value": false,
+        "no-console": false,
+        "object-literal-sort-keys": false,
+        "no-unused-expression": false
+    },
+    "defaultSeverity": "warning"
 }
