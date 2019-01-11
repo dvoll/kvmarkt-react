@@ -1,32 +1,33 @@
-import { Input, Select, SelectOption, TextArea } from '@dvll/ulight-react';
+import { BaseButton, Input, Select, SelectOption, TextArea } from '@dvll/ulight-react';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 import DurationPicker from 'src/components/DurationPicker/DurationPicker';
 import { DynamicFormInputTypes } from 'src/components/DynamicFormField/DynamicFormField';
 import FormField from 'src/components/DynamicFormField/FormField';
 import LoadingSpinner from 'src/components/LoadingSpinner/LoadingSpinner';
 import { ApplicationState } from 'src/store';
 import { FetchDataTypeState } from 'src/store/generic/index.class';
+import { Place } from 'src/store/places';
 import { SchemeCategory } from 'src/store/scheme-categories/index.generic';
-import { addRequest, fetchRequest } from 'src/store/schemes/actions';
 import { Scheme } from 'src/store/schemes/types';
 import SchemeTextEditor from '../SchemeTextEditor/SchemeTextEditor';
 
 interface SchemeFormState extends Scheme {
+    forceErrors: boolean;
     places: string[];
 }
 
-interface DispatchProps {
-    addScheme: (scheme: Scheme) => any;
-    load: () => any;
-}
+// interface DispatchProps {
+//     addScheme: (scheme: Scheme) => any;
+//     load: () => any;
+// }
 
-interface SchemeFormProps extends DispatchProps {
+interface SchemeFormProps {
     scheme?: Scheme;
     // categories?: SchemeCategory[];
     submitForm: (scheme: Scheme) => void;
     categoriesState: FetchDataTypeState<SchemeCategory>;
+    placesState: FetchDataTypeState<Place>;
 }
 
 enum InputFieldNames {
@@ -41,16 +42,17 @@ enum InputFieldNames {
 class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
     public readonly state: SchemeFormState = {
         id: 0,
-        title: 'Hinzugefügt',
-        description: 'Hey',
-        content: 'Inhalt',
-        ageStart: 10,
-        ageEnd: 12,
-        author: 1,
-        category: 1,
-        place: 1,
-        places: ['1'],
+        title: '',
+        description: 'Deine Beschreibung',
+        content: '<h1>Deine Überschrift</h1><p>Dein <strong>Inhalt</strong>!</p>',
+        ageStart: -1,
+        ageEnd: -1,
+        author: -1,
+        category: -1,
+        place: -1,
+        places: [],
         duration: { hours: 0, minutes: 5 },
+        forceErrors: false,
     };
 
     // private UlightCard = withUlightTheme(RoundedCard);
@@ -62,55 +64,94 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
     }
 
     public render() {
-        const { category, places, title, description } = this.state;
-        // const Heading = withUlightTheme(BaseHeading);
+        const { category, places, title, description, content = '' } = this.state;
         return (
             <form onSubmit={this.handleSubmit}>
                 <React.Fragment>
-                    {/* <this.UlightCard
-                                    name="rounded01"
-                                    key="rounded01"
-                                    style={{
-                                        // ...styles,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                    }}
-                                > */}
-                    {/* <BaseHeading level={2}>
-                                    1. Infos
-                                    {/* <span style={{ color: accentColor }}>1.</span>  *}
-                                </BaseHeading> */}
-
                     {this.titleInput(title)}
                     {this.descriptionInput(description)}
                     {this.categorySelect(this.props.categoriesState, category)}
-                    {this.placeSelect(places)}
+                    {this.placeSelect(this.props.placesState, places)}
                     {this.durationInput()}
-                    {/* </this.UlightCard> */}
-                    {/* <this.UlightCard style={{}} key="rounded02"> */}
-                    {/* <BaseHeading level={2}>
-                                    <span style={{ color: accentColor }}>2.</span> Inhalt
-                                </BaseHeading> */}
-                    {this.textEditor()}
-                    {/* </this.UlightCard> */}
+                    {this.textEditor(content)}
+                    <BaseButton type="submit">Absenden</BaseButton>
                 </React.Fragment>
             </form>
         );
     }
 
-    private textEditor() {
+    private shouldShowErrors() {
+        return this.state.forceErrors ? true : 'touched';
+    }
+
+    //#region title input
+    private titleErrorMessages(title: string): string[] {
+        const errors: string[] = [];
+        const min = 8;
+        if (title.length < min) {
+            errors.push(`Die Überschrift muss aus mindestens ${min} Zeichen bestehen.`);
+        }
+        return errors;
+    }
+
+    private titleInput(title: string) {
         return (
-            <FormField labelName="Ausführliche Beschreibung">
-                <SchemeTextEditor text="<h1>Eine Überschrift</h1>" />
+            <FormField
+                labelName="Überschrift"
+                id={InputFieldNames.TITLE}
+                errors={this.titleErrorMessages(title)}
+                showError={this.shouldShowErrors()}
+            >
+                <Input type={DynamicFormInputTypes.TEXT} value={title} onChange={this.handleFormInput} />
             </FormField>
         );
     }
 
+    //#endregion
+
+    //#region description input
+    private descriptionErrorMessages(title: string): string[] {
+        const errors: string[] = [];
+        const min = 20;
+        const max = 200;
+        if (title.length < min) {
+            errors.push(`Die Kurzbeschreibung muss aus mindestens ${min} Zeichen bestehen.`);
+        }
+        if (title.length > max) {
+            errors.push(`Die Kurzbeschreibung darf aus höchstens ${max} Zeichen bestehen.`);
+        }
+        return errors;
+    }
+
+    private descriptionInput(description: string) {
+        return (
+            <FormField
+                labelName="Kurzbeschreibung"
+                id={InputFieldNames.DESCRIPTION}
+                errors={this.descriptionErrorMessages(description)}
+                showError={this.shouldShowErrors()}
+            >
+                <TextArea value={description} onChange={this.handleFormInput} />
+            </FormField>
+        );
+    }
+    //#endregion
+
+    //#region category select
+    private categoryErrorMessages(categoryId: number): string[] {
+        const errors: string[] = [];
+        if (categoryId === -1) {
+            errors.push('Keine Kategorie gewählt.');
+        }
+        return errors;
+    }
     private categorySelect(categoriesState: FetchDataTypeState<SchemeCategory>, value: number) {
         return (
             <FormField
                 labelName="Kategorie"
                 description="Wähle genau eine Kategorie, die am Besten zu deinem Programm passt."
+                errors={this.categoryErrorMessages(value)}
+                showError={this.shouldShowErrors()}
             >
                 {categoriesState.loading ? (
                     <LoadingSpinner isLoading={true} height={80} />
@@ -120,7 +161,7 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
                         id={InputFieldNames.CATEGORY}
                         name="category"
                         value={value}
-                        /* tslint:disable-next-line:jsx-no-lambda */ onChange={this.handleFormInput}
+                        onChange={this.handleFormInput}
                     >
                         {categoriesState.data.map(item => (
                             <SelectOption key={'category' + item.id} value={item.id}>
@@ -132,43 +173,48 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
             </FormField>
         );
     }
-    private placeSelect(places: string[]) {
+    //#endregion
+
+    //#region place select
+    private placeErrorMessages(places: string[]): string[] {
+        const errors: string[] = [];
+        if (places.length === 0) {
+            errors.push('Es muss mindestens ein Ort ausgewählt werden.');
+        }
+        return errors;
+    }
+
+    private placeSelect(placesState: FetchDataTypeState<Place>, places: string[]) {
         return (
             <FormField
                 labelName="Orte"
                 description="Wähle einen oder mehrere Orte, an denen sich dein Programm durchführen lässt."
+                errors={this.placeErrorMessages(places)}
+                showError={this.shouldShowErrors()}
             >
-                <Select
-                    id={InputFieldNames.PLACES}
-                    multiple={true}
-                    name="places"
-                    value={places}
-                    /* tslint:disable-next-line:jsx-no-lambda */ onChange={this.handleFormInput}
-                >
-                    <SelectOption value={3}>Garten</SelectOption>
-                    <SelectOption value={2}>großer Raum</SelectOption>
-                    <SelectOption value={1}>Sporthalle</SelectOption>
-                </Select>
+                {placesState.loading ? (
+                    <LoadingSpinner isLoading={true} height={80} />
+                ) : (
+                    <Select
+                        id={InputFieldNames.PLACES}
+                        multiple={true}
+                        name="places"
+                        value={places}
+                        onChange={this.handleFormInput}
+                    >
+                        {placesState.data.map(item => (
+                            <SelectOption key={'place' + item.id} value={item.id}>
+                                {item.name}
+                            </SelectOption>
+                        ))}
+                    </Select>
+                )}
             </FormField>
         );
     }
+    //#endregion
 
-    private titleInput(title: string) {
-        return (
-            <FormField labelName="Überschrift" id={InputFieldNames.TITLE}>
-                <Input type={DynamicFormInputTypes.TEXT} value={title} onChange={this.handleFormInput} />
-            </FormField>
-        );
-    }
-
-    private descriptionInput(description: string) {
-        return (
-            <FormField labelName="Kurzbeschreibung" id={InputFieldNames.DESCRIPTION}>
-                <TextArea value={description} onChange={this.handleFormInput} />
-            </FormField>
-        );
-    }
-
+    //#region duration input
     private durationInput() {
         return (
             <FormField labelName="Dauer">
@@ -181,10 +227,32 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
             </FormField>
         );
     }
+    //#endregion
 
-    private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-        this.props.submitForm(this.state);
+    //#region content input
+    private contentErrorMessages(content: string): string[] {
+        const errors: string[] = [];
+        const min = 50;
+        if (content.length < min) {
+            errors.push(`Die ausführliche Beschreibung muss aus mindestens ${min} Zeichen bestehen.`);
+        }
+        return errors;
     }
+
+    private textEditor(content: string) {
+        return (
+            <FormField
+                labelName="Ausführliche Beschreibung"
+                id={InputFieldNames.CONTENT}
+                errors={this.contentErrorMessages(content)}
+                showError={this.shouldShowErrors()}
+            >
+                <SchemeTextEditor value={content} onChange={this.handleFormInput} />
+            </FormField>
+        );
+    }
+    //#endregion
+
     private handleFormInput(
         event:
             | React.ChangeEvent<HTMLInputElement>
@@ -207,11 +275,14 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
                 const tar = event.target as any;
                 const places = tar.selectedOptions;
                 console.log('places', places);
-                this.setState({ place: +places[0], places });
+                this.setState({ place: places[0] ? +places[0] : -1, places });
                 break;
             case InputFieldNames.DESCRIPTION:
                 event = event as React.ChangeEvent<HTMLSelectElement>;
                 this.setState({ description: event.target.value });
+                break;
+            case InputFieldNames.CONTENT:
+                this.setState({ content: event.target.value });
                 break;
             case InputFieldNames.DURATION:
                 const ev = event as React.ChangeEvent<any>;
@@ -223,25 +294,29 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
         }
         // this.props.submitForm(this.state);
     }
+
+    private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        this.setState({ forceErrors: true });
+        this.props.submitForm(this.state);
+    }
 }
 
 // It's usually good practice to only include one context at a time in a connected component.
 // Although if necessary, you can always include multiple contexts. Just make sure to
 // separate them from each other to prevent prop conflicts.
-const mapStateToProps = ({ categoriesState }: ApplicationState) => ({
+const mapStateToProps = ({ categoriesState, placesState }: ApplicationState) => ({
+    placesState,
     categoriesState,
 });
 
 // mapDispatchToProps is especially useful for constraining our actions to the connected component.
 // You can access these via `this.props`.
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-    addScheme: (scheme: Scheme) => dispatch(addRequest(scheme)),
-    load: () => dispatch(fetchRequest()),
-});
+// const mapDispatchToProps = (dispatch: Dispatch) => ({
+//     addScheme: (scheme: Scheme) => dispatch(addRequest(scheme)),
+//     load: () => dispatch(fetchRequest()),
+// });
 
 // Now let's connect our component!
 // With redux v4's improved typings, we can finally omit generics here.
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(SchemeForm);
+export default connect(mapStateToProps)(SchemeForm);

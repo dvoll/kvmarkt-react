@@ -1,0 +1,35 @@
+.FormField {
+    margin: 0px 0 20px 0;
+}
+
+.FormField .FormField-title-line {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.FormField.has-error .FormField-title-line::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: -20px;
+    width: 5px;
+    height: 5px;
+    border-radius: 25px;
+    background-color: rgb(179, 31, 31);
+    z-index: 10;
+    top: calc(50% - 2.5px);
+}
+
+.FormField .FormField-label {
+    font-weight: bold;
+    margin: 5px 10px 5px 0;
+    display: block;
+    font-size: 0.8rem;
+}
+.FormField .FormField-errors {
+    margin: 0 10px;
+    color: rgb(179, 31, 31);
+    font-size: 0.9rem;
+}

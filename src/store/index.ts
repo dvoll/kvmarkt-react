@@ -1,8 +1,8 @@
 // import { routerReducer, RouterState } from 'react-router-redux'
-import { Action, AnyAction, combineReducers, Dispatch } from 'redux'
+import { Action, AnyAction, combineReducers, Dispatch } from 'redux';
 // import { layoutReducer, LayoutState } from './layout'
 
-import { schemesReducer } from "./schemes/reducers";
+import { schemesReducer } from './schemes/reducers';
 
 import { combineEpics, Epic } from 'redux-observable';
 import { ignoreElements, tap } from 'rxjs/operators';
@@ -13,22 +13,24 @@ import { AuthState } from './auth/types';
 import { blogPostsReducer } from './blogposts/reducers';
 import { BlogPostsState } from './blogposts/types';
 import { FetchDataTypeState } from './generic/index.class';
+import PlaceStateObject from './places';
 import { routeReducer } from './route/reducers';
 import { RouteState } from './route/types';
 import CategoryStateObject, { SchemeCategory } from './scheme-categories/index.generic';
 import { schemesAddEpic, schemesRequestEpic } from './schemes/epics';
-import { SchemesState } from "./schemes/types";
+import { SchemesState } from './schemes/types';
 
 // The top-level state object.
 //
 // `connected-react-router` already injects the router state typings for us,
 // so we can ignore them here.
 export interface ApplicationState {
-    schemesState: SchemesState,
-    blogPostsState: BlogPostsState,
-    authState: AuthState,
-    routeState: RouteState,
-    categoriesState: FetchDataTypeState<SchemeCategory>,
+    schemesState: SchemesState;
+    blogPostsState: BlogPostsState;
+    authState: AuthState;
+    routeState: RouteState;
+    categoriesState: FetchDataTypeState<SchemeCategory>;
+    placesState: FetchDataTypeState<SchemeCategory>;
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property
@@ -39,17 +41,15 @@ export const rootReducer = combineReducers<ApplicationState>({
     blogPostsState: blogPostsReducer,
     authState: authReducer,
     routeState: routeReducer,
-    categoriesState: CategoryStateObject.reducer
-})
+    categoriesState: CategoryStateObject.reducer,
+    placesState: PlaceStateObject.reducer,
+});
 
-const loggerEpic: Epic<AnyAction, AnyAction, void> = (
-    action$,
-    state
-) => {
+const loggerEpic: Epic<AnyAction, AnyAction, void> = (action$, state) => {
     return action$.pipe(
-        tap( action => console.log("Action: ", action.type) ),
-        ignoreElements(), 
-    )
+        tap(action => console.log('Action: ', action.type)),
+        ignoreElements()
+    );
 };
 
 export const rootEpic = combineEpics(
@@ -58,8 +58,9 @@ export const rootEpic = combineEpics(
     schemesAddEpic,
     authLoginEpic,
     KvMarktApiSimpleElementFetchEpic('category', CategoryStateObject),
+    KvMarktApiSimpleElementFetchEpic('place', PlaceStateObject)
 );
 
 export interface ConnectedReduxProps<A extends Action = AnyAction> {
-    dispatch: Dispatch<A>
+    dispatch: Dispatch<A>;
 }

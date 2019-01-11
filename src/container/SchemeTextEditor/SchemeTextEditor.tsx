@@ -5,30 +5,32 @@ import ReactQuill from 'react-quill';
 // import 'react-quill/dist/quill.snow.css';
 import './SchemeTextEditor.css';
 
-interface SchemeTextEditorState {
-    text: string;
-}
-export interface SchemeTextEditorProps {
+// interface SchemeTextEditorState {
+//     text: string;
+// }
+export interface SchemeTextEditorProps
+    extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
     text?: string;
+    // value: string;
+    // onChange: (value: string) => void;
 }
 
-class SchemeTextEditor extends React.Component<SchemeTextEditorProps, SchemeTextEditorState> {
+class SchemeTextEditor extends React.Component<SchemeTextEditorProps, {}> {
     constructor(props: SchemeTextEditorProps) {
         super(props);
-        this.state = { text: this.props.text || '' }; // You can also pass a Quill Delta here
         this.handleChange = this.handleChange.bind(this);
-    }
-
-    public handleChange(value: string) {
-        this.setState({ text: value });
+        this.handleBlur = this.handleBlur.bind(this);
     }
 
     public render() {
+        const value = this.props.value as string;
         return (
             <ThemeContext.Consumer>
                 {theme => (
                     <ReactQuill
-                        value={this.state.text}
+                        onBlur={this.handleBlur}
+                        key={'editor' + this.props.id}
+                        value={value}
                         onChange={this.handleChange}
                         style={{
                             ['--foreground-light-rgb' as any]: theme.foregroundLight,
@@ -40,6 +42,20 @@ class SchemeTextEditor extends React.Component<SchemeTextEditorProps, SchemeText
                 )}
             </ThemeContext.Consumer>
         );
+    }
+
+    private handleChange(value: string) {
+        const ev: any = {
+            target: {},
+        };
+        ev.target.id = this.props.id || '';
+        ev.target.value = value;
+        this.props.onChange && this.props.onChange(ev);
+    }
+
+    private handleBlur(value: any) {
+        const ev: any = {};
+        this.props.onBlur && this.props.onBlur(ev);
     }
 }
 

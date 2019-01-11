@@ -6,6 +6,7 @@ import PageLayout from 'src/components/layout/PageLayout/PageLayout';
 import withTitle from 'src/components/layout/PageLayout/withTitleComponent';
 import SchemeForm from 'src/container/SchemeForm/SchemeForm';
 import { ApplicationState } from 'src/store';
+import PlaceStateObject from 'src/store/places';
 import CategoryStateObject, { SchemeCategory } from 'src/store/scheme-categories/index.generic';
 import { Scheme } from 'src/store/schemes/types';
 
@@ -17,6 +18,7 @@ interface SchemeFormPageState {
 export interface SchemeFormPageProps {
     categories?: SchemeCategory[];
     loadCategories?: () => any;
+    loadPlaces?: () => any;
 }
 
 class SchemeFormPage extends React.Component<SchemeFormPageProps, SchemeFormPageState> {
@@ -27,24 +29,6 @@ class SchemeFormPage extends React.Component<SchemeFormPageProps, SchemeFormPage
     }
 
     public render() {
-        // const step1FormState =
-        // {
-        //     name: 'schemeForm',
-        //     heading: 'Programm erstellen',
-        //     groups: [
-        //         {
-        //             heading: 'Gruppenüberschrift',
-        //             inputItems: [
-        //                 {
-        //                     type: DynamicFormInputTypes.TEXT,
-        //                     labelName: 'Überschrift',
-        //                     onChange: (event: React.ChangeEvent<HTMLInputElement>) => this.setState({title: event.target.value})
-        //                 }
-        //             ]
-        //         }
-        //     ]
-        // };
-
         return (
             <PageLayout>
                 <BaseLabel name="Neues Programm" />
@@ -52,7 +36,10 @@ class SchemeFormPage extends React.Component<SchemeFormPageProps, SchemeFormPage
                 <p>Hier kannst du dein eigenens Programm dieser Sammlung hinzufügen.</p>
                 {/* tslint:disable-next-line:jsx-no-lambda */}
                 <SchemeForm submitForm={(scheme: Scheme) => console.table(scheme)} />
+                <br />
+                <br />
                 <BaseButton onClick={this.props.loadCategories}>Load Categories</BaseButton>
+                <BaseButton onClick={this.props.loadPlaces}>Load Places</BaseButton>
             </PageLayout>
         );
     }
@@ -69,6 +56,7 @@ const mapStateToProps = ({ categoriesState }: ApplicationState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return {
         loadCategories: () => dispatch(CategoryStateObject.fetchRequest()),
+        loadPlaces: () => dispatch(PlaceStateObject.fetchRequest()),
     };
 };
 
