@@ -1,8 +1,9 @@
-import { BaseButton } from '@dvll/ulight-react';
+import { BaseButton, BaseHeading, BaseLabel } from '@dvll/ulight-react';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
+import { compose, Dispatch } from 'redux';
 import PageLayout from 'src/components/layout/PageLayout/PageLayout';
+import withTitle from 'src/components/layout/PageLayout/withTitleComponent';
 import SchemeForm from 'src/container/SchemeForm/SchemeForm';
 import { ApplicationState } from 'src/store';
 import CategoryStateObject, { SchemeCategory } from 'src/store/scheme-categories/index.generic';
@@ -46,9 +47,12 @@ class SchemeFormPage extends React.Component<SchemeFormPageProps, SchemeFormPage
 
         return (
             <PageLayout>
-                <BaseButton onClick={this.props.loadCategories}>Load Categories</BaseButton>
+                <BaseLabel name="Neues Programm" />
+                <BaseHeading level={1}>Füge dein Programm hinzu</BaseHeading>
+                <p>Hier kannst du dein eigenens Programm dieser Sammlung hinzufügen.</p>
                 {/* tslint:disable-next-line:jsx-no-lambda */}
                 <SchemeForm submitForm={(scheme: Scheme) => console.table(scheme)} />
+                <BaseButton onClick={this.props.loadCategories}>Load Categories</BaseButton>
             </PageLayout>
         );
     }
@@ -68,7 +72,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    withTitle('Programm hinzufügen', true)
 )(SchemeFormPage);

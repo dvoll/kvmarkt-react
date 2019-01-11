@@ -26,6 +26,7 @@ class SchemeForm extends React.Component<DispatchProps, {}> {
             author: 1,
             category: 1,
             place: 1,
+            duration: { hours: 0, minutes: 0 },
         });
     }
 
@@ -42,8 +43,7 @@ class SchemeForm extends React.Component<DispatchProps, {}> {
 // It's usually good practice to only include one context at a time in a connected component.
 // Although if necessary, you can always include multiple contexts. Just make sure to
 // separate them from each other to prevent prop conflicts.
-const mapStateToProps = ({ schemesState }: ApplicationState) =>
-    ({} as SchemesState);
+const mapStateToProps = ({ schemesState }: ApplicationState) => ({} as SchemesState);
 
 // mapDispatchToProps is especially useful for constraining our actions to the connected component.
 // You can access these via `this.props`.

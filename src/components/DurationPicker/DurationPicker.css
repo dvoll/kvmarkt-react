@@ -1,0 +1,14 @@
+.DurationPicker {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.DurationPicker > * {
+    margin-right: 10px;
+}
+
+.DurationPicker > .DurationPickerInput {
+    width: 50px;
+    margin: 0 10px 0 0;
+}

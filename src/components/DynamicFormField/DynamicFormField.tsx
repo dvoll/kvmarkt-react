@@ -1,4 +1,4 @@
-import { BaseFormLabel, BaseInput } from '@dvll/ulight-react';
+import { BaseFormLabel, Input } from '@dvll/ulight-react';
 import * as React from 'react';
 
 export enum DynamicFormInputTypes {
@@ -61,9 +61,9 @@ const DynamicFormField: React.SFC<DynFormTypes> = props => {
         case DynamicFormInputTypes.BUTTON:
         case DynamicFormInputTypes.SUBMIT:
             element = (
-                <BaseInput
+                <Input
                     key={'DynamicFormFiled' + props.id}
-                    {...props as React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>}
+                    {...props as any} /* React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>} */
                     type={props.type}
                 />
             );

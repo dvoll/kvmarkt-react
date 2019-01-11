@@ -1,10 +1,11 @@
-import { BaseHeading, BaseInput, Select, SelectOption, ThemeContext, withUlightTheme } from '@dvll/ulight-react';
+import { Input, Select, SelectOption, TextArea } from '@dvll/ulight-react';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import DurationPicker from 'src/components/DurationPicker/DurationPicker';
 import { DynamicFormInputTypes } from 'src/components/DynamicFormField/DynamicFormField';
 import FormField from 'src/components/DynamicFormField/FormField';
-import RoundedCard from 'src/components/RoundedCard/RoundedCard';
+import LoadingSpinner from 'src/components/LoadingSpinner/LoadingSpinner';
 import { ApplicationState } from 'src/store';
 import { FetchDataTypeState } from 'src/store/generic/index.class';
 import { SchemeCategory } from 'src/store/scheme-categories/index.generic';
@@ -32,6 +33,9 @@ enum InputFieldNames {
     TITLE = 'title',
     CATEGORY = 'category',
     PLACES = 'places',
+    DESCRIPTION = 'description',
+    CONTENT = 'content',
+    DURATION = 'duration',
 }
 
 class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
@@ -46,9 +50,10 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
         category: 1,
         place: 1,
         places: ['1'],
+        duration: { hours: 0, minutes: 5 },
     };
 
-    private UlightCard = withUlightTheme(RoundedCard);
+    // private UlightCard = withUlightTheme(RoundedCard);
 
     constructor(props: SchemeFormProps) {
         super(props);
@@ -56,31 +61,13 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
         this.handleFormInput = this.handleFormInput.bind(this);
     }
 
-    // public addScheme() {
-    //     this.props.addScheme({
-    //         id: 0,
-    //         title: 'Hinzugefügt',
-    //         description: 'Hey',
-    //         content: 'Inhalt',
-    //         ageStart: 10,
-    //         ageEnd: 12,
-    //         author: 1,
-    //         category: 1,
-    //         place: 1,
-    //     });
-    // }
-
     public render() {
-        const { category, places, title } = this.state;
-
+        const { category, places, title, description } = this.state;
+        // const Heading = withUlightTheme(BaseHeading);
         return (
             <form onSubmit={this.handleSubmit}>
-                <ThemeContext.Consumer>
-                    {theme => {
-                        const accentColor = `rgba(${theme.accent}, 1)`;
-                        return (
-                            <React.Fragment>
-                                <this.UlightCard
+                <React.Fragment>
+                    {/* <this.UlightCard
                                     name="rounded01"
                                     key="rounded01"
                                     style={{
@@ -88,38 +75,45 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
                                         display: 'flex',
                                         flexDirection: 'column',
                                     }}
-                                >
-                                    <BaseHeading level={1}>
-                                        <span style={{ color: accentColor }}>1.</span> Infos
-                                    </BaseHeading>
+                                > */}
+                    {/* <BaseHeading level={2}>
+                                    1. Infos
+                                    {/* <span style={{ color: accentColor }}>1.</span>  *}
+                                </BaseHeading> */}
 
-                                    {this.titleInput(title)}
-                                    {this.categorySelect(this.props.categoriesState, category)}
-                                    {this.placeSelect(places)}
-                                </this.UlightCard>
-                                <this.UlightCard style={{}} key="rounded02">
-                                    <BaseHeading level={1}>
-                                        <span style={{ color: accentColor }}>2.</span> Inhalt
-                                    </BaseHeading>
-                                    {this.textEditor()}
-                                </this.UlightCard>
-                            </React.Fragment>
-                        );
-                    }}
-                </ThemeContext.Consumer>
+                    {this.titleInput(title)}
+                    {this.descriptionInput(description)}
+                    {this.categorySelect(this.props.categoriesState, category)}
+                    {this.placeSelect(places)}
+                    {this.durationInput()}
+                    {/* </this.UlightCard> */}
+                    {/* <this.UlightCard style={{}} key="rounded02"> */}
+                    {/* <BaseHeading level={2}>
+                                    <span style={{ color: accentColor }}>2.</span> Inhalt
+                                </BaseHeading> */}
+                    {this.textEditor()}
+                    {/* </this.UlightCard> */}
+                </React.Fragment>
             </form>
         );
     }
 
     private textEditor() {
-        return <SchemeTextEditor text="<h1>Eine Überschrift</h1>" />;
+        return (
+            <FormField labelName="Ausführliche Beschreibung">
+                <SchemeTextEditor text="<h1>Eine Überschrift</h1>" />
+            </FormField>
+        );
     }
 
     private categorySelect(categoriesState: FetchDataTypeState<SchemeCategory>, value: number) {
         return (
-            <FormField labelName="Kategorie">
+            <FormField
+                labelName="Kategorie"
+                description="Wähle genau eine Kategorie, die am Besten zu deinem Programm passt."
+            >
                 {categoriesState.loading ? (
-                    <span>lädt...</span>
+                    <LoadingSpinner isLoading={true} height={80} />
                 ) : (
                     <Select
                         key={InputFieldNames.CATEGORY}
@@ -140,7 +134,10 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
     }
     private placeSelect(places: string[]) {
         return (
-            <FormField labelName="Orte">
+            <FormField
+                labelName="Orte"
+                description="Wähle einen oder mehrere Orte, an denen sich dein Programm durchführen lässt."
+            >
                 <Select
                     id={InputFieldNames.PLACES}
                     multiple={true}
@@ -158,16 +155,29 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
 
     private titleInput(title: string) {
         return (
-            // <BaseInput //                             </BaseFormLabel > //     Überschrift // <BaseFormLabel htmlFor = "title" >
-            //     key="input12"
-            //     type="text"
-            //     name="title"
-            //     value={title}
-            //     onChange={this.handleFormInput}
-            //     id={InputFieldNames.TITLE}
-            // />
             <FormField labelName="Überschrift" id={InputFieldNames.TITLE}>
-                <BaseInput type={DynamicFormInputTypes.TEXT} value={title} onChange={this.handleFormInput} />
+                <Input type={DynamicFormInputTypes.TEXT} value={title} onChange={this.handleFormInput} />
+            </FormField>
+        );
+    }
+
+    private descriptionInput(description: string) {
+        return (
+            <FormField labelName="Kurzbeschreibung" id={InputFieldNames.DESCRIPTION}>
+                <TextArea value={description} onChange={this.handleFormInput} />
+            </FormField>
+        );
+    }
+
+    private durationInput() {
+        return (
+            <FormField labelName="Dauer">
+                <DurationPicker
+                    id={InputFieldNames.DURATION}
+                    hours={this.state.duration.hours}
+                    minutes={this.state.duration.minutes}
+                    onChange={this.handleFormInput}
+                />
             </FormField>
         );
     }
@@ -175,22 +185,39 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
     private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         this.props.submitForm(this.state);
     }
-    private handleFormInput(event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) {
+    private handleFormInput(
+        event:
+            | React.ChangeEvent<HTMLInputElement>
+            | React.ChangeEvent<HTMLSelectElement>
+            | React.ChangeEvent<HTMLTextAreaElement>
+    ) {
         const elementId = event.target.id;
         switch (elementId) {
             case InputFieldNames.TITLE:
+                // event = event as React.ChangeEvent<HTMLInputElement>;
                 this.setState({ title: '' + event.target.value });
                 break;
             case InputFieldNames.CATEGORY:
+                // event = event as React.ChangeEvent<HTMLSelectElement>;
                 const category = +(event.target.value as string | number);
                 this.setState({ category, categoryName: this.props.categoriesState.data[category].name });
-                // ,
                 break;
             case InputFieldNames.PLACES:
+                // event = event as React.ChangeEvent<HTMLSelectElement>;
                 const tar = event.target as any;
                 const places = tar.selectedOptions;
                 console.log('places', places);
                 this.setState({ place: +places[0], places });
+                break;
+            case InputFieldNames.DESCRIPTION:
+                event = event as React.ChangeEvent<HTMLSelectElement>;
+                this.setState({ description: event.target.value });
+                break;
+            case InputFieldNames.DURATION:
+                const ev = event as React.ChangeEvent<any>;
+                const hours = ev.target.hours;
+                const minutes = ev.target.minutes;
+                this.setState({ duration: { hours, minutes } });
                 break;
             default:
         }
