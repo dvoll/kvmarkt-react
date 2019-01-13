@@ -1,6 +1,7 @@
 import { BaseButton, Input, Select, SelectOption, TextArea } from '@dvll/ulight-react';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Prompt } from 'react-router';
 import DurationPicker from 'src/components/DurationPicker/DurationPicker';
 import { DynamicFormInputTypes } from 'src/components/DynamicFormField/DynamicFormField';
 import FormField from 'src/components/DynamicFormField/FormField';
@@ -15,6 +16,7 @@ import SchemeTextEditor from '../SchemeTextEditor/SchemeTextEditor';
 interface SchemeFormState extends Scheme {
     forceErrors: boolean;
     places: string[];
+    touched: boolean;
 }
 
 // interface DispatchProps {
@@ -53,6 +55,7 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
         places: [],
         duration: { hours: 0, minutes: 5 },
         forceErrors: false,
+        touched: false,
     };
 
     // private UlightCard = withUlightTheme(RoundedCard);
@@ -68,6 +71,10 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
         return (
             <form onSubmit={this.handleSubmit}>
                 <React.Fragment>
+                    <Prompt
+                        when={this.state.touched}
+                        message="Noch wurden deine Änderungen nicht gespeichert. Trotzdem diese Seite verlassen?"
+                    />
                     {this.titleInput(title)}
                     {this.descriptionInput(description)}
                     {this.categorySelect(this.props.categoriesState, category)}
@@ -263,32 +270,36 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
         switch (elementId) {
             case InputFieldNames.TITLE:
                 // event = event as React.ChangeEvent<HTMLInputElement>;
-                this.setState({ title: '' + event.target.value });
+                this.setState({ title: '' + event.target.value, touched: true });
                 break;
             case InputFieldNames.CATEGORY:
                 // event = event as React.ChangeEvent<HTMLSelectElement>;
                 const category = +(event.target.value as string | number);
-                this.setState({ category, categoryName: this.props.categoriesState.data[category].name });
+                this.setState({
+                    category,
+                    categoryName: this.props.categoriesState.data[category].name,
+                    touched: true,
+                });
                 break;
             case InputFieldNames.PLACES:
                 // event = event as React.ChangeEvent<HTMLSelectElement>;
                 const tar = event.target as any;
                 const places = tar.selectedOptions;
                 console.log('places', places);
-                this.setState({ place: places[0] ? +places[0] : -1, places });
+                this.setState({ place: places[0] ? +places[0] : -1, places, touched: true });
                 break;
             case InputFieldNames.DESCRIPTION:
                 event = event as React.ChangeEvent<HTMLSelectElement>;
-                this.setState({ description: event.target.value });
+                this.setState({ description: event.target.value, touched: true });
                 break;
             case InputFieldNames.CONTENT:
-                this.setState({ content: event.target.value });
+                this.setState({ content: event.target.value, touched: true });
                 break;
             case InputFieldNames.DURATION:
                 const ev = event as React.ChangeEvent<any>;
                 const hours = ev.target.hours;
                 const minutes = ev.target.minutes;
-                this.setState({ duration: { hours, minutes } });
+                this.setState({ duration: { hours, minutes, touched: true } });
                 break;
             default:
         }
