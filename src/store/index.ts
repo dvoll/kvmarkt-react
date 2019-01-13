@@ -1,12 +1,10 @@
 // import { routerReducer, RouterState } from 'react-router-redux'
 import { Action, AnyAction, combineReducers, Dispatch } from 'redux';
-// import { layoutReducer, LayoutState } from './layout'
-
-import { schemesReducer } from './schemes/reducers';
-
 import { combineEpics, Epic } from 'redux-observable';
 import { ignoreElements, tap } from 'rxjs/operators';
 import { KvMarktApiSimpleElementFetchEpic } from 'src/utils';
+import { appReducer } from './app/reducers';
+import { AppState } from './app/types';
 import { authLoginEpic } from './auth/epics';
 import { authReducer } from './auth/reducers';
 import { AuthState } from './auth/types';
@@ -18,9 +16,9 @@ import { routeReducer } from './route/reducers';
 import { RouteState } from './route/types';
 import CategoryStateObject, { SchemeCategory } from './scheme-categories/index.generic';
 import { schemesAddEpic, schemesRequestEpic } from './schemes/epics';
+// import { layoutReducer, LayoutState } from './layout'
+import { schemesReducer } from './schemes/reducers';
 import { SchemesState } from './schemes/types';
-import { AppState } from './app/types';
-import { appReducer } from './app/reducers';
 
 // The top-level state object.
 //
