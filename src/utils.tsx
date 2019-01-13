@@ -58,3 +58,12 @@ export const makeKvMarktApiRequest = (identifier: string, authToken: string) => 
         .then(response => response.result);
     // TODO: dispatch general laoding failed action; Find a better place for that
 };
+
+export const localStoragePrefix = 'KvMarkt-';
+
+export const writePermanent = (key: string, value: string) => {
+    localStorage.setItem(localStoragePrefix + key, value);
+};
+export const readFromPermanent = (key: string) => {
+    return localStorage.getItem(localStoragePrefix + key);
+};

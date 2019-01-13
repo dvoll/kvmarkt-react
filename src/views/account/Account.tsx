@@ -1,9 +1,10 @@
-import { BaseHeading, BaseLabel } from "@dvll/ulight-react";
-import * as React from "react";
-import { connect } from "react-redux";
-import { Dispatch } from "redux";
-import PageLayout from "src/components/layout/PageLayout/PageLayout";
-import { changeTitle, disableBackButton } from "src/store/route/actions";
+import { BaseHeading, BaseLabel } from '@dvll/ulight-react';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import PageLayout from 'src/components/layout/PageLayout/PageLayout';
+import UserAppSettings from 'src/container/UserAppSettings/UserAppSettings';
+import { changeTitle, disableBackButton } from 'src/store/route/actions';
 
 export interface AccountProps {
     time?: Date;
@@ -20,13 +21,17 @@ const Account: React.SFC<AccountProps & DispatchProps> = props => {
         <PageLayout>
             <BaseLabel name="Profil" />
             <BaseHeading level={1}>Einstellungen</BaseHeading>
+            <UserAppSettings />
         </PageLayout>
     );
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     setTitle: (title: any) => dispatch(changeTitle(title)),
-    disableBackButton: () => dispatch(disableBackButton())
+    disableBackButton: () => dispatch(disableBackButton()),
 });
 
-export default connect(null, mapDispatchToProps)(Account);
+export default connect(
+    null,
+    mapDispatchToProps
+)(Account);

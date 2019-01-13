@@ -1,32 +1,29 @@
-
-import { getTheme, Theme, ThemeContext, ThemeType } from "@dvll/ulight-react";
-import * as React from "react";
-import { connect } from "react-redux";
-import { Route, RouteComponentProps, Switch, withRouter } from "react-router-dom";
-import { compose } from "redux";
-import "./App.css";
-import UserApp from "./components/UserApp/UserApp";
-import { ApplicationState } from "./store";
-import { AuthState } from "./store/auth/types";
-import { privateRoute } from "./utils";
-import Dashboard from "./views/dashboard/Dashboard";
-import Login from "./views/login/Login";
+import { getTheme, ThemeContext, UlightTheme, UlightThemeTypes } from '@dvll/ulight-react';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { Route, RouteComponentProps, Switch, withRouter } from 'react-router-dom';
+import { compose } from 'redux';
+import './App.css';
+import UserApp from './components/UserApp/UserApp';
+import { ApplicationState } from './store';
+import { AuthState } from './store/auth/types';
+import { privateRoute } from './utils';
+import Dashboard from './views/dashboard/Dashboard';
+import Login from './views/login/Login';
 // import logo from "./logo.svg";
 
-interface State {
-    themeType: ThemeType;
+interface AppProps extends RouteComponentProps<{}> {
+    themeType: UlightThemeTypes;
+    authState: AuthState;
 }
 
-class App extends React.Component<RouteComponentProps<{}> & {authState: AuthState}, State> {
+class App extends React.Component<AppProps, {}> {
     // private butonProps: ButtonProps = {};
 
-    private theme: Theme;
+    private theme: UlightTheme;
 
-    constructor(props: RouteComponentProps<{}> & { authState: AuthState }) {
+    constructor(props: AppProps) {
         super(props);
-        const themeType: ThemeType = ThemeType.LIGHT;
-        this.theme = getTheme(themeType);
-        this.state = { themeType };
     }
 
     public componentDidMount() {
@@ -34,12 +31,12 @@ class App extends React.Component<RouteComponentProps<{}> & {authState: AuthStat
     }
 
     public shouldComponentUpdate(nextProps: {}) {
-        console.log("Update App ", nextProps);
+        console.log('Update App ', nextProps);
         return true;
     }
 
     public render() {
-        this.theme = getTheme(this.state.themeType);
+        this.theme = getTheme(this.props.themeType);
         this.setBodyStyle();
         return (
             // <BrowserRouter>
@@ -49,7 +46,7 @@ class App extends React.Component<RouteComponentProps<{}> & {authState: AuthStat
                         <Route exact path="/login" component={Login} />
                         <Route path="/admin" component={Dashboard} />
                         {/* <Route path="/" component={UserApp} /> */}
-                        { privateRoute(UserApp, this.props.authState.data.authenticated, '/')}
+                        {privateRoute(UserApp, this.props.authState.data.authenticated, '/')}
                         {/* <Redirect exact from="/" to="/dashboard" />  */}
                     </Switch>
                 </ThemeContext.Provider>
@@ -59,22 +56,20 @@ class App extends React.Component<RouteComponentProps<{}> & {authState: AuthStat
     }
 
     private setBodyStyle() {
-        const body = document.getElementsByTagName("body").item(0);
+        const body = document.getElementsByTagName('body').item(0);
         // tslint:disable-next-line:no-unused-expression
         if (body !== null) {
-            body.style.setProperty(
-                "background-color",
-                `rgb(${this.theme.background})`
-            );
-            body.style.setProperty("color", `rgb(${this.theme.foreground})`);
+            body.style.setProperty('background-color', `rgb(${this.theme.background})`);
+            body.style.setProperty('color', `rgb(${this.theme.foreground})`);
         }
     }
 }
 
 // export default App;
 
-const mapStateToProps = ({ authState }: ApplicationState) => ({
-    authState
+const mapStateToProps = ({ authState, appState }: ApplicationState) => ({
+    authState,
+    themeType: appState.theme,
 });
 
 // const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -83,6 +78,6 @@ const mapStateToProps = ({ authState }: ApplicationState) => ({
 
 export default compose(
     withRouter,
-    connect(mapStateToProps),
+    connect(mapStateToProps)
     // mapDispatchToProps
 )(App);

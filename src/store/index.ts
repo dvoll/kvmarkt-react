@@ -19,12 +19,15 @@ import { RouteState } from './route/types';
 import CategoryStateObject, { SchemeCategory } from './scheme-categories/index.generic';
 import { schemesAddEpic, schemesRequestEpic } from './schemes/epics';
 import { SchemesState } from './schemes/types';
+import { AppState } from './app/types';
+import { appReducer } from './app/reducers';
 
 // The top-level state object.
 //
 // `connected-react-router` already injects the router state typings for us,
 // so we can ignore them here.
 export interface ApplicationState {
+    appState: AppState;
     schemesState: SchemesState;
     blogPostsState: BlogPostsState;
     authState: AuthState;
@@ -37,6 +40,7 @@ export interface ApplicationState {
 // using the reducer with the matching name. It's important that the names match exactly, and that
 // the reducer acts on the corresponding ApplicationState property type.
 export const rootReducer = combineReducers<ApplicationState>({
+    appState: appReducer,
     schemesState: schemesReducer,
     blogPostsState: blogPostsReducer,
     authState: authReducer,
