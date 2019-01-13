@@ -1,22 +1,15 @@
 import { BaseHeading, BaseLabel } from '@dvll/ulight-react';
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 import PageLayout from 'src/components/layout/PageLayout/PageLayout';
+import withTitle from 'src/components/layout/PageLayout/withTitleComponent';
 import UserAppSettings from 'src/container/UserAppSettings/UserAppSettings';
-import { changeTitle, disableBackButton } from 'src/store/route/actions';
 
-export interface AccountProps {
-    time?: Date;
-}
+// export interface AccountProps {
+//     // time?: Date;
+// }
 
-interface DispatchProps {
-    setTitle: (title: any) => void;
-    disableBackButton: () => void;
-}
-
-const Account: React.SFC<AccountProps & DispatchProps> = props => {
-    props.setTitle('Profil');
+const Account: React.SFC<{}> = props => {
+    // props.setTitle('Profil');
     return (
         <PageLayout>
             <BaseLabel name="Profil" />
@@ -26,12 +19,9 @@ const Account: React.SFC<AccountProps & DispatchProps> = props => {
     );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-    setTitle: (title: any) => dispatch(changeTitle(title)),
-    disableBackButton: () => dispatch(disableBackButton()),
-});
+// const mapDispatchToProps = (dispatch: Dispatch) => ({
+//     setTitle: (title: any) => dispatch(changeTitle(title)),
+//     disableBackButton: () => dispatch(disableBackButton()),
+// });
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(Account);
+export default withTitle('Alle Programme')(Account);
