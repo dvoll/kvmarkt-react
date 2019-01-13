@@ -16,7 +16,7 @@ const reducer: Reducer<AppState> = (state = initialState, action) => {
     //
     switch (action.type) {
         case AppActionTypes.CHANGE_THEME: {
-            // TODO: Move Side-Effect to Epic
+            // TODO: Move side-effect to Epic
             writePermanent(themeTypeKey, '' + action.payload);
             return { ...state, theme: action.payload };
         }

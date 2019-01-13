@@ -56,7 +56,7 @@ export const makeKvMarktApiRequest = (identifier: string, authToken: string) => 
     })
         .then(response => response.json())
         .then(response => response.result);
-    // TODO: dispatch general laoding failed action; Find a better place for that
+    // TODO: How to detect fetch errors for all requests?
 };
 
 export const localStoragePrefix = 'KvMarkt-';
