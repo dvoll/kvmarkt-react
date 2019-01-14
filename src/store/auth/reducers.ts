@@ -1,15 +1,35 @@
 import { Reducer } from 'redux';
-import { AuthActionTypes, AuthState } from './types';
+import { readFromPermanent, writePermanent } from 'src/utils';
+import { Auth, AuthActionTypes, AuthState } from './types';
+
+const storageTokenKey = 'auth-token';
+const storageUserKey = 'auth-id';
+const storageFirstnameKey = 'auth-firstname';
+const storageLastnameKey = 'auth-lastname';
+const storageEmailKey = 'auth-lastname';
+
+const initialAuthData: () => Auth = () => {
+    const tokenString = readFromPermanent(storageTokenKey);
+    if (tokenString !== null) {
+        const userIdString = readFromPermanent(storageUserKey);
+        return {
+            authenticated: true,
+            tokenId: tokenString,
+            contributor: {
+                id: userIdString ? +userIdString : -1,
+                firstname: readFromPermanent(storageFirstnameKey) || '',
+                lastname: readFromPermanent(storageLastnameKey) || '',
+                email: readFromPermanent(storageEmailKey) || '',
+            },
+        };
+    }
+    return {
+        authenticated: false,
+    };
+};
 
 export const initialState: AuthState = {
-    data: {
-        authenticated: true,
-        tokenId:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkYXJpb3ZvbGwra3ZtYXJrdHRlc3RAZ21haWwuY29tIiwianRpIjoiYjc5MDM3OWUtOTQwZC00NmNlLThiZGYtNDI3MzcyMjI2NDYxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIwNjAxMjY0YS0zNzc2LTRiOWQtOWJiNi0yMzkyZTA2OTg1YWYiLCJleHAiOjE1NDk1NDkzMzYsImlzcyI6ImxvY2FsaG9zdCIsImF1ZCI6ImxvY2FsaG9zdCJ9.5E9yNDI4cSo8eKi1JDWriVgfFjMKHrJQMoO-cgkfq3s',
-        userId: 1,
-        // firstname: Max,
-        // lastname: Mustermann
-    },
+    data: initialAuthData(),
     errors: undefined,
     loading: false,
 };
@@ -26,6 +46,13 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
             return { ...state, loading: false };
         }
         case AuthActionTypes.LOGIN_SUCCESS: {
+            // TODO: Move side-effects to epic
+            writePermanent(storageTokenKey, action.payload.tokenId);
+            writePermanent(storageUserKey, action.payload.contributor.id);
+            writePermanent(storageFirstnameKey, action.payload.contributor.firstname);
+            writePermanent(storageLastnameKey, action.payload.contributor.lastname);
+            writePermanent(storageEmailKey, action.payload.contributor.email);
+
             return { ...state, loading: false, data: action.payload };
         }
         case AuthActionTypes.LOGIN_ERROR: {
