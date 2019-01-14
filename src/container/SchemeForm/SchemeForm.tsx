@@ -15,7 +15,7 @@ import SchemeTextEditor from '../SchemeTextEditor/SchemeTextEditor';
 
 interface SchemeFormState extends Scheme {
     forceErrors: boolean;
-    places: string[];
+    // places: string[];
     touched: boolean;
 }
 
@@ -51,7 +51,7 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
         ageEnd: -1,
         author: -1,
         category: -1,
-        place: -1,
+        // place: -1,
         places: [],
         duration: { hours: 0, minutes: 5 },
         forceErrors: false,
@@ -183,7 +183,7 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
     //#endregion
 
     //#region place select
-    private placeErrorMessages(places: string[]): string[] {
+    private placeErrorMessages(places: number[]): string[] {
         const errors: string[] = [];
         if (places.length === 0) {
             errors.push('Es muss mindestens ein Ort ausgewählt werden.');
@@ -191,7 +191,8 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
         return errors;
     }
 
-    private placeSelect(placesState: FetchDataTypeState<Place>, places: string[]) {
+    private placeSelect(placesState: FetchDataTypeState<Place>, places: number[]) {
+        const stringPlaces = places.map(x => '' + x);
         return (
             <FormField
                 labelName="Orte"
@@ -206,7 +207,7 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
                         id={InputFieldNames.PLACES}
                         multiple={true}
                         name="places"
-                        value={places}
+                        value={stringPlaces}
                         onChange={this.handleFormInput}
                     >
                         {placesState.data.map(item => (
@@ -275,18 +276,16 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
             case InputFieldNames.CATEGORY:
                 // event = event as React.ChangeEvent<HTMLSelectElement>;
                 const category = +(event.target.value as string | number);
-                this.setState({
-                    category,
-                    categoryName: this.props.categoriesState.data[category].name,
-                    touched: true,
-                });
+                const categoryObject = this.props.categoriesState.data.find(cat => cat.id === category);
+                const categoryName = categoryObject !== undefined ? categoryObject.name : '';
+                this.setState({ category, categoryName, touched: true });
                 break;
             case InputFieldNames.PLACES:
                 // event = event as React.ChangeEvent<HTMLSelectElement>;
                 const tar = event.target as any;
                 const places = tar.selectedOptions;
                 console.log('places', places);
-                this.setState({ place: places[0] ? +places[0] : -1, places, touched: true });
+                this.setState({ places, touched: true });
                 break;
             case InputFieldNames.DESCRIPTION:
                 event = event as React.ChangeEvent<HTMLSelectElement>;

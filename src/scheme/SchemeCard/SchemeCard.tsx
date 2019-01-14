@@ -1,13 +1,8 @@
-import {
-    BaseButton,
-    BaseHeading,
-    BaseLabel,
-    ThemeContext
-} from "@dvll/ulight-react";
-import * as React from "react";
-import RoundedCard from "src/components/RoundedCard/RoundedCard";
-import { Scheme } from "src/store/schemes/types";
-import "./SchemeCard.css";
+import { BaseButton, BaseHeading, BaseLabel, ThemeContext } from '@dvll/ulight-react';
+import * as React from 'react';
+import RoundedCard from 'src/components/RoundedCard/RoundedCard';
+import { Scheme } from 'src/store/schemes/types';
+import './SchemeCard.css';
 // import images from './kvmarkt-card-images.png';
 
 export interface SchemeCardProps {
@@ -25,29 +20,24 @@ const SchemeCard: React.SFC<SchemeCardProps> = props => {
         categoryName,
         ageStart,
         ageEnd,
-        placeName
+        // placeName
     } = props.scheme;
 
     const detailItemList = [
-        { key: "Alter", icon: "people", value: `${ageStart}-${ageEnd}` },
-        { key: "Dauer", icon: "people", value: `1:20 h` },
-        { key: "Ort", icon: "people", value: placeName || "" }
+        { key: 'Alter', icon: 'people', value: `${ageStart}-${ageEnd}` },
+        { key: 'Dauer', icon: 'people', value: `1:20 h` },
+        { key: 'Ort', icon: 'people', value: 'Placeholder' || '' },
     ];
 
     const detailItem = (key: string, value: string | number) => (
         <div key={key} className="detail">
             {/* icon */}
             <span>{value}</span>
-            <BaseLabel
-                style={{ letterSpacing: "normal", fontSize: "0.6rem" }}
-                name={key}
-            />
+            <BaseLabel style={{ letterSpacing: 'normal', fontSize: '0.6rem' }} name={key} />
         </div>
     );
 
-    const detailItems = detailItemList.map(item =>
-        detailItem(item.key, item.value ? item.value : ' - ')
-    );
+    const detailItems = detailItemList.map(item => detailItem(item.key, item.value ? item.value : ' - '));
 
     // const iconToggleButton2 = <BaseButton className="iconToggle" style={{ ["--foreground-rgb" as any]: "242, 242, 242", ["--background-rgb" as any]: "223, 72, 72" }}>
     //     {/* <BaseIcon name='cd' /> */}
@@ -70,19 +60,19 @@ const SchemeCard: React.SFC<SchemeCardProps> = props => {
     //     </BaseButton>
     // );
 
-    const badge = (
-        !!categoryName && <BaseButton
+    const badge = !!categoryName && (
+        <BaseButton
             className={`badge category-${category}`}
             // icon="bench"
             style={{
-                ["--foreground-rgb" as any]: "242, 242, 242",
-                ["--background-rgb" as any]: "170, 84, 84",
-                textTransform: "uppercase"
+                ['--foreground-rgb' as any]: '242, 242, 242',
+                ['--background-rgb' as any]: '170, 84, 84',
+                textTransform: 'uppercase',
             }}
             iconStyle={{
-                height: "100%",
+                height: '100%',
                 paddingBlockStart: 0,
-                paddingBlockEnd: 0
+                paddingBlockEnd: 0,
             }}
             title={categoryName}
         />
@@ -104,15 +94,17 @@ const SchemeCard: React.SFC<SchemeCardProps> = props => {
         <ThemeContext.Consumer>
             {theme => {
                 const styles = {
-                    ["--foreground-rgb" as any]: theme.foreground,
-                    ["--secondary-rgb" as any]: theme.secondary,
-                    ["--background-rgb" as any]: theme.background,
-                    ["--background-accent-rgb" as any]: theme.backgroundAccent,
-                    ...props.style
+                    ['--foreground-rgb' as any]: theme.foreground,
+                    ['--secondary-rgb' as any]: theme.secondary,
+                    ['--background-rgb' as any]: theme.background,
+                    ['--background-accent-rgb' as any]: theme.backgroundAccent,
+                    ...props.style,
                 };
-                return <RoundedCard className="SchemeCard" style={styles} linkTo={`schemes/${id}`} key={id}>
+                return (
+                    <RoundedCard className="SchemeCard" style={styles} linkTo={`schemes/${id}`} key={id}>
                         {!props.placeholder ? schemeCardContent : null}
-                    </RoundedCard>;
+                    </RoundedCard>
+                );
             }}
         </ThemeContext.Consumer>
     );
@@ -121,13 +113,16 @@ const SchemeCard: React.SFC<SchemeCardProps> = props => {
 
 export default (React as any).memo(
     SchemeCard,
-    ({ scheme, placeholder }: SchemeCardProps, { scheme: nextScheme, placeholder: nextPlaceholder }: SchemeCardProps) => {
+    (
+        { scheme, placeholder }: SchemeCardProps,
+        { scheme: nextScheme, placeholder: nextPlaceholder }: SchemeCardProps
+    ) => {
         return (
             placeholder === nextPlaceholder &&
             scheme.id === nextScheme.id &&
             scheme.title === nextScheme.title &&
             scheme.category === nextScheme.category &&
-            scheme.place === nextScheme.place &&
+            scheme.places === nextScheme.places &&
             scheme.author === nextScheme.author &&
             scheme.description === nextScheme.description
         );

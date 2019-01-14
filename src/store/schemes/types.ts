@@ -5,10 +5,11 @@ export interface Scheme {
     title: string;
     description: string;
     content?: string;
-    placeName?: string;
-    place: number;
-    place2?: number;
-    place3?: number;
+    // placeName?: string;
+    // place: number;
+    // place2?: number;
+    // place3?: number;
+    places: number[];
     authorName?: string;
     author: number;
     categoryName?: string;

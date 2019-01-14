@@ -25,7 +25,8 @@ class SchemeForm extends React.Component<DispatchProps, {}> {
             ageEnd: 12,
             author: 1,
             category: 1,
-            place: 1,
+            // place: 1,
+            places: [],
             duration: { hours: 0, minutes: 0 },
         });
     }
