@@ -39,6 +39,8 @@ enum InputFieldNames {
     DESCRIPTION = 'description',
     CONTENT = 'content',
     DURATION = 'duration',
+    AGE_START = 'age-start',
+    AGE_END = 'age-end',
 }
 
 class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
@@ -47,8 +49,8 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
         title: '',
         description: 'Deine Beschreibung',
         content: '<h1>Deine Überschrift</h1><p>Dein <strong>Inhalt</strong>!</p>',
-        ageStart: -1,
-        ageEnd: -1,
+        ageStart: 7,
+        ageEnd: 13,
         author: -1,
         category: -1,
         // place: -1,
@@ -67,7 +69,7 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
     }
 
     public render() {
-        const { category, places, title, description, content = '' } = this.state;
+        const { category, places, title, description, content = '', ageStart, ageEnd } = this.state;
         return (
             <form onSubmit={this.handleSubmit}>
                 <React.Fragment>
@@ -79,6 +81,7 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
                     {this.descriptionInput(description)}
                     {this.categorySelect(this.props.categoriesState, category)}
                     {this.placeSelect(this.props.placesState, places)}
+                    {this.ageInput(ageStart, ageEnd)}
                     {this.durationInput()}
                     {this.textEditor(content)}
                     <BaseButton type="submit">Absenden</BaseButton>
@@ -237,6 +240,54 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
     }
     //#endregion
 
+    //#region age input
+    private ageErrorMessages(ageStart: number, ageEnd: number): string[] {
+        const messages: string[] = [];
+        if (ageStart < 0 || ageEnd < 0 || ageStart > 99) {
+            messages.push('Das Alter muss im Bereich von 1 bis 99 sein. ');
+        }
+        if (ageStart >= ageEnd) {
+            messages.push('Das maximale Alter muss größer sein als das Minimale.');
+        }
+        return messages;
+    }
+
+    private ageInput(ageStart: number, ageEnd: number) {
+        return (
+            <FormField
+                labelName="Alter"
+                errors={this.ageErrorMessages(ageStart, ageEnd)}
+                showError={this.shouldShowErrors()}
+            >
+                <div className={'DurationPicker'}>
+                    <label htmlFor={InputFieldNames.AGE_START}>von</label>
+                    <Input
+                        id={InputFieldNames.AGE_START}
+                        name={InputFieldNames.AGE_START}
+                        value={ageStart}
+                        onChange={this.handleFormInput}
+                        className="DurationPickerInput"
+                        type="number"
+                        min="1"
+                        max="99"
+                    />
+                    <label htmlFor={InputFieldNames.AGE_END}>bis</label>
+                    <Input
+                        id={InputFieldNames.AGE_END}
+                        name={InputFieldNames.AGE_END}
+                        value={ageEnd}
+                        onChange={this.handleFormInput}
+                        className="DurationPickerInput"
+                        type="number"
+                        min="1"
+                        max="99"
+                    />
+                </div>
+            </FormField>
+        );
+    }
+    //#endregion
+
     //#region content input
     private contentErrorMessages(content: string): string[] {
         const errors: string[] = [];
@@ -268,6 +319,7 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
             | React.ChangeEvent<HTMLTextAreaElement>
     ) {
         const elementId = event.target.id;
+        const anyEvent = event as React.ChangeEvent<any>;
         switch (elementId) {
             case InputFieldNames.TITLE:
                 // event = event as React.ChangeEvent<HTMLInputElement>;
@@ -295,10 +347,17 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
                 this.setState({ content: event.target.value, touched: true });
                 break;
             case InputFieldNames.DURATION:
-                const ev = event as React.ChangeEvent<any>;
-                const hours = ev.target.hours;
-                const minutes = ev.target.minutes;
-                this.setState({ duration: { hours, minutes, touched: true } });
+                const hours = anyEvent.target.hours;
+                const minutes = anyEvent.target.minutes;
+                this.setState({ duration: { hours, minutes }, touched: true });
+                break;
+            case InputFieldNames.AGE_START:
+                const ageStart = +anyEvent.target.value;
+                this.setState({ ageStart, touched: true });
+                break;
+            case InputFieldNames.AGE_END:
+                const ageEnd = +anyEvent.target.value;
+                this.setState({ ageEnd, touched: true });
                 break;
             default:
         }
