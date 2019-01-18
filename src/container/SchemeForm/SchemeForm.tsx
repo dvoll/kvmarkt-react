@@ -1,21 +1,20 @@
 import { BaseButton, Input, Select, SelectOption, TextArea } from '@dvll/ulight-react';
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { Prompt } from 'react-router';
 import DurationPicker from 'src/components/DurationPicker/DurationPicker';
 import { DynamicFormInputTypes } from 'src/components/DynamicFormField/DynamicFormField';
 import FormField from 'src/components/DynamicFormField/FormField';
 import LoadingSpinner from 'src/components/LoadingSpinner/LoadingSpinner';
-import { ApplicationState } from 'src/store';
 import { FetchDataTypeState } from 'src/store/generic/index.class';
 import { Place } from 'src/store/places';
 import { SchemeCategory } from 'src/store/scheme-categories/index.generic';
 import { Scheme } from 'src/store/schemes/types';
 import SchemeTextEditor from '../SchemeTextEditor/SchemeTextEditor';
 
-interface SchemeFormState extends Scheme {
+interface SchemeFormState {
     forceErrors: boolean;
     // places: string[];
+    scheme: Scheme;
     touched: boolean;
 }
 
@@ -45,19 +44,20 @@ enum InputFieldNames {
 
 class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
     public readonly state: SchemeFormState = {
-        id: 0,
-        title: '',
-        description: 'Deine Beschreibung',
-        content: '<h1>Deine Überschrift</h1><p>Dein <strong>Inhalt</strong>!</p>',
-        ageStart: 7,
-        ageEnd: 13,
-        author: -1,
-        category: -1,
-        // place: -1,
-        places: [],
-        duration: { hours: 0, minutes: 5 },
-        forceErrors: false,
+        scheme: {
+            id: 0,
+            title: '',
+            description: 'Deine Beschreibung',
+            content: '<h1>Deine Überschrift</h1><p>Dein <strong>Inhalt</strong>!</p>',
+            ageStart: 7,
+            ageEnd: 13,
+            author: -1,
+            category: -1,
+            places: [],
+            duration: { hours: 0, minutes: 5 },
+        },
         touched: false,
+        forceErrors: false,
     };
 
     // private UlightCard = withUlightTheme(RoundedCard);
@@ -66,10 +66,13 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleFormInput = this.handleFormInput.bind(this);
+        if (props.scheme !== undefined) {
+            this.state.scheme = props.scheme;
+        }
     }
 
     public render() {
-        const { category, places, title, description, content = '', ageStart, ageEnd } = this.state;
+        const { category, places, title, description, content = '', ageStart, ageEnd, duration } = this.state.scheme;
         return (
             <form onSubmit={this.handleSubmit}>
                 <React.Fragment>
@@ -82,7 +85,7 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
                     {this.categorySelect(this.props.categoriesState, category)}
                     {this.placeSelect(this.props.placesState, places)}
                     {this.ageInput(ageStart, ageEnd)}
-                    {this.durationInput()}
+                    {this.durationInput(duration ? duration.hours : 0, duration ? duration.minutes : 0)}
                     {this.textEditor(content)}
                     <BaseButton type="submit">Absenden</BaseButton>
                 </React.Fragment>
@@ -226,13 +229,13 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
     //#endregion
 
     //#region duration input
-    private durationInput() {
+    private durationInput(hours: number, minutes: number) {
         return (
             <FormField labelName="Dauer">
                 <DurationPicker
                     id={InputFieldNames.DURATION}
-                    hours={this.state.duration.hours}
-                    minutes={this.state.duration.minutes}
+                    hours={hours}
+                    minutes={minutes}
                     onChange={this.handleFormInput}
                 />
             </FormField>
@@ -320,44 +323,45 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
     ) {
         const elementId = event.target.id;
         const anyEvent = event as React.ChangeEvent<any>;
+        const scheme = this.state.scheme;
         switch (elementId) {
             case InputFieldNames.TITLE:
                 // event = event as React.ChangeEvent<HTMLInputElement>;
-                this.setState({ title: '' + event.target.value, touched: true });
+                this.setState({ scheme: { ...scheme, title: '' + event.target.value }, touched: true });
                 break;
             case InputFieldNames.CATEGORY:
                 // event = event as React.ChangeEvent<HTMLSelectElement>;
                 const category = +(event.target.value as string | number);
                 const categoryObject = this.props.categoriesState.data.find(cat => cat.id === category);
                 const categoryName = categoryObject !== undefined ? categoryObject.name : '';
-                this.setState({ category, categoryName, touched: true });
+                this.setState({ scheme: { ...scheme, category, categoryName, touched: true } });
                 break;
             case InputFieldNames.PLACES:
                 // event = event as React.ChangeEvent<HTMLSelectElement>;
                 const tar = event.target as any;
                 const places = tar.selectedOptions;
                 console.log('places', places);
-                this.setState({ places, touched: true });
+                this.setState({ scheme: { ...scheme, places, touched: true } });
                 break;
             case InputFieldNames.DESCRIPTION:
                 event = event as React.ChangeEvent<HTMLSelectElement>;
-                this.setState({ description: event.target.value, touched: true });
+                this.setState({ scheme: { ...scheme, description: event.target.value, touched: true } });
                 break;
             case InputFieldNames.CONTENT:
-                this.setState({ content: event.target.value, touched: true });
+                this.setState({ scheme: { ...scheme, content: event.target.value, touched: true } });
                 break;
             case InputFieldNames.DURATION:
                 const hours = anyEvent.target.hours;
                 const minutes = anyEvent.target.minutes;
-                this.setState({ duration: { hours, minutes }, touched: true });
+                this.setState({ scheme: { ...scheme, duration: { hours, minutes }, touched: true } });
                 break;
             case InputFieldNames.AGE_START:
                 const ageStart = +anyEvent.target.value;
-                this.setState({ ageStart, touched: true });
+                this.setState({ scheme: { ...scheme, ageStart, touched: true } });
                 break;
             case InputFieldNames.AGE_END:
                 const ageEnd = +anyEvent.target.value;
-                this.setState({ ageEnd, touched: true });
+                this.setState({ scheme: { ...scheme, ageEnd, touched: true } });
                 break;
             default:
         }
@@ -367,17 +371,17 @@ class SchemeForm extends React.Component<SchemeFormProps, SchemeFormState> {
     private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         this.setState({ forceErrors: true });
-        this.props.submitForm(this.state);
+        this.props.submitForm(this.state.scheme);
     }
 }
 
 // It's usually good practice to only include one context at a time in a connected component.
 // Although if necessary, you can always include multiple contexts. Just make sure to
 // separate them from each other to prevent prop conflicts.
-const mapStateToProps = ({ categoriesState, placesState }: ApplicationState) => ({
-    placesState,
-    categoriesState,
-});
+// const mapStateToProps = ({ categoriesState, placesState }: ApplicationState) => ({
+//     placesState,
+//     categoriesState,
+// });
 
 // mapDispatchToProps is especially useful for constraining our actions to the connected component.
 // You can access these via `this.props`.
@@ -388,4 +392,4 @@ const mapStateToProps = ({ categoriesState, placesState }: ApplicationState) => 
 
 // Now let's connect our component!
 // With redux v4's improved typings, we can finally omit generics here.
-export default connect(mapStateToProps)(SchemeForm);
+export default SchemeForm;

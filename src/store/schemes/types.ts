@@ -21,7 +21,7 @@ export interface Scheme {
     created?: Date;
     updated?: string;
     isFavorite?: boolean;
-    duration: { hours: number; minutes: number };
+    duration?: { hours: number; minutes: number };
 }
 
 // This type is basically shorthand for `{ [key: string]: any }`. Feel free to replace `any` with

@@ -1,5 +1,5 @@
-import { Reducer } from "redux";
-import { action } from "typesafe-actions";
+import { Reducer } from 'redux';
+import { action } from 'typesafe-actions';
 
 export interface FetchActionTypes {
     FETCH_REQUEST: string;
@@ -9,24 +9,22 @@ export interface FetchActionTypes {
 }
 
 export interface FetchDataTypeState<T> {
-    readonly loading: boolean
-    readonly data: T[]
-    readonly errors?: string
+    readonly loading: boolean;
+    readonly data: T[];
+    readonly errors?: string;
 }
 
 export class ReduxSimpleFetchState<T> {
-    
-    public state: FetchDataTypeState<T>;
     public readonly fetchActionTypes: FetchActionTypes;
-    
-    private readonly initialState: FetchDataTypeState<T>;
+
+    public readonly initialState: FetchDataTypeState<T>;
     private readonly name: string;
 
     constructor(name: string, initialData: T[] = []) {
         this.name = name;
         this.initialState = {
             loading: false,
-            data: initialData
+            data: initialData,
         };
         this.fetchActionTypes = {
             FETCH_REQUEST: `@@${this.name}/FETCH_REQUEST`,
@@ -36,14 +34,13 @@ export class ReduxSimpleFetchState<T> {
         };
     }
 
-    public  fetchRequest = () => action(this.fetchActionTypes.FETCH_REQUEST);
+    public fetchRequest = () => action(this.fetchActionTypes.FETCH_REQUEST);
 
-    public  fetchAbort = () => action(this.fetchActionTypes.FETCH_CANCELED);
+    public fetchAbort = () => action(this.fetchActionTypes.FETCH_CANCELED);
 
-    public  fetchSuccess = (data: T) => action(this.fetchActionTypes.FETCH_SUCCESS, data);
+    public fetchSuccess = (data: T) => action(this.fetchActionTypes.FETCH_SUCCESS, data);
 
-    public  fetchError = (message: string) =>
-        action(this.fetchActionTypes.FETCH_ERROR, message);
+    public fetchError = (message: string) => action(this.fetchActionTypes.FETCH_ERROR, message);
 
     public reducer: Reducer<FetchDataTypeState<T>> = (state = this.initialState, fetchAction) => {
         switch (fetchAction.type) {
@@ -67,6 +64,5 @@ export class ReduxSimpleFetchState<T> {
 
     public epics = () => {
         console.log('Epics of ' + this.name + ' called.');
-    }
-
+    };
 }

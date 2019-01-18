@@ -1,9 +1,10 @@
 // import { getSimpleFetchReducer } from "../generic";
-import { ReduxSimpleFetchState } from "../generic/index.class";
+import { createContext } from 'react';
+import { ReduxSimpleFetchState } from '../generic/index.class';
 
 export interface SchemeCategory {
-    id: number, 
-    name: string,
+    id: number;
+    name: string;
 }
 
 // const categoryReduxData = getSimpleFetchReducer<SchemeCategory>('categories', []);
@@ -14,4 +15,4 @@ const CategoryStateObject = new ReduxSimpleFetchState<SchemeCategory>('categorie
 
 export default CategoryStateObject;
 
-
+export const SchemeCategoryContext = createContext(CategoryStateObject.initialState);

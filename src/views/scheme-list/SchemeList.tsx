@@ -7,16 +7,14 @@ import SchemeForm from 'src/container/SchemeForm/SchemeFormOld';
 import { SchemeContext } from 'src/scheme/scheme-context';
 import SchemeCard from 'src/scheme/SchemeCard/SchemeCard';
 import { Scheme } from 'src/store/schemes/types';
-import { WithTitleHandlerProps } from '../dashboard/Dashboard';
+// import { WithTitleHandlerProps } from '../dashboard/Dashboard';
 // import PageLayout from "src/components/layout/PageLayout/PageLayout";
 // import { Scheme } from "src/scheme";
 // import SchemeCard from "src/scheme/SchemeCard/SchemeCard";
 // import { schemes } from "src/scheme/schemes.mock";
 
-class SchemeList extends React.Component<
-    WithTitleHandlerProps,
-    { shouldSchemeRender: boolean }
-> {
+// WithTitleHandlerProps,
+class SchemeList extends React.Component<{ shouldSchemeRender: boolean }> {
     public state = { shouldSchemeRender: false };
 
     private renderTimeout: number;
@@ -47,9 +45,7 @@ class SchemeList extends React.Component<
         return (
             <PageLayout>
                 <BaseLabel name="Alle Programme" />
-                <BaseHeading level={1}>
-                    Finde hier dein nächstes Programm
-                </BaseHeading>
+                <BaseHeading level={1}>Finde hier dein nächstes Programm</BaseHeading>
                 {/* <SchemeForm /> */}
                 {/* <SchemeFilterBar  /> */}
                 {/* {this.state.shouldSchemeRender ?  */}
@@ -60,11 +56,7 @@ class SchemeList extends React.Component<
                             // <React.Suspense fallback={<LoadingSpinner isLoading />}>
                             <ItemGrid
                                 items={schemesState.data}
-                                mapping={
-                                    this.state.shouldSchemeRender
-                                        ? this.schemeMapping
-                                        : this.schemeDummyMapping
-                                }
+                                mapping={this.state.shouldSchemeRender ? this.schemeMapping : this.schemeDummyMapping}
                             />
                             // </React.Suspense>
                         );

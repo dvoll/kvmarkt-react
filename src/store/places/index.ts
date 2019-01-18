@@ -1,4 +1,5 @@
 // import { getSimpleFetchReducer } from "../generic";
+import { createContext } from 'react';
 import { ReduxSimpleFetchState } from '../generic/index.class';
 
 export interface Place {
@@ -13,3 +14,5 @@ export interface Place {
 const PlaceStateObject = new ReduxSimpleFetchState<Place>('places', []);
 
 export default PlaceStateObject;
+
+export const SchemePlaceContext = createContext(PlaceStateObject.initialState);

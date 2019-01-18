@@ -1,9 +1,9 @@
-import { createContext } from "react";
-import { SchemesState } from "src/store/schemes/types";
+import { createContext } from 'react';
+import { SchemesState } from 'src/store/schemes/types';
 
 const initialContext: SchemesState = {
     loading: false,
-    data: []
-}
+    data: [],
+};
 
-export const SchemeContext = createContext(initialContext)
+export const SchemeContext = createContext(initialContext);

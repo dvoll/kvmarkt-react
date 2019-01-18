@@ -24,4 +24,4 @@ const Account: React.SFC<{}> = props => {
 //     disableBackButton: () => dispatch(disableBackButton()),
 // });
 
-export default withTitle('Alle Programme')(Account);
+export default withTitle('Profil + Einstellungen')(Account);

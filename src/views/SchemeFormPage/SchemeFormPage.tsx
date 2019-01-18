@@ -6,8 +6,8 @@ import PageLayout from 'src/components/layout/PageLayout/PageLayout';
 import withTitle from 'src/components/layout/PageLayout/withTitleComponent';
 import SchemeForm from 'src/container/SchemeForm/SchemeForm';
 import { ApplicationState } from 'src/store';
-import PlaceStateObject from 'src/store/places';
-import CategoryStateObject, { SchemeCategory } from 'src/store/scheme-categories/index.generic';
+import PlaceStateObject, { SchemePlaceContext } from 'src/store/places';
+import CategoryStateObject, { SchemeCategory, SchemeCategoryContext } from 'src/store/scheme-categories/index.generic';
 import { Scheme } from 'src/store/schemes/types';
 
 interface SchemeFormPageState {
@@ -34,8 +34,25 @@ class SchemeFormPage extends React.Component<SchemeFormPageProps, SchemeFormPage
                 <BaseLabel name="Neues Programm" />
                 <BaseHeading level={1}>Füge dein Programm hinzu</BaseHeading>
                 <p>Hier kannst du dein eigenens Programm dieser Sammlung hinzufügen.</p>
-                {/* tslint:disable-next-line:jsx-no-lambda */}
-                <SchemeForm submitForm={(scheme: Scheme) => console.table(scheme)} />
+                <SchemeCategoryContext.Consumer>
+                    {categoriesState => {
+                        return (
+                            <SchemePlaceContext.Consumer>
+                                {placeState => {
+                                    // return this.content(scheme, placeState, categoriesState);
+                                    return (
+                                        <SchemeForm
+                                            placesState={placeState}
+                                            categoriesState={categoriesState}
+                                            // tslint:disable-next-line:jsx-no-lambda
+                                            submitForm={(scheme: Scheme) => console.table(scheme)}
+                                        />
+                                    );
+                                }}
+                            </SchemePlaceContext.Consumer>
+                        );
+                    }}
+                </SchemeCategoryContext.Consumer>
                 <br />
                 <br />
                 <BaseButton onClick={this.props.loadCategories}>Load Categories</BaseButton>
