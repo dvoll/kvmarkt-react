@@ -5,6 +5,7 @@ import './FormField.css';
 export interface FormFieldProps {
     labelName: string;
     id?: string;
+    name?: string;
     description?: string;
 
     showError?: 'touched' | boolean;
@@ -26,12 +27,12 @@ class FormField extends React.PureComponent<FormFieldProps, FormFieldState> {
     }
 
     public render() {
-        const { id, labelName, children, description, errors = [], showError = true } = this.props;
+        const { id, name = id, labelName, children, description, errors = [], showError = true } = this.props;
         // if (children instanceof React.ComponentType<)
         const mappedChildren = React.Children.map(
             children,
             (child: React.ReactElement<React.HTMLProps<HTMLInputElement> | React.HTMLProps<HTMLSelectElement>>) => {
-                const props = { id, onBlur: this.blurHandler, ...child.props };
+                const props = { id, name, onBlur: this.blurHandler, ...child.props };
                 return React.cloneElement(child, props);
             }
         );
@@ -44,7 +45,10 @@ class FormField extends React.PureComponent<FormFieldProps, FormFieldState> {
                     <span className="FormField-errors">{this.shouldShowError(showError) ? errors : null}</span>
                 </div>
                 {description && (
-                    <span className="Ulight-container" style={{ color: 'var(--secondary-color)' }}>
+                    <span
+                        className="Ulight-container FormField-description"
+                        style={{ color: 'var(--secondary-color)' }}
+                    >
                         {description}
                     </span>
                 )}

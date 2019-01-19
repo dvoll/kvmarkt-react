@@ -50,6 +50,7 @@ export const KvMarktApiSimpleFetchEpic = (
 
 export const makeKvMarktApiRequest = (identifier: string, authToken: string) => {
     return fetch('http://localhost:52833/api/' + identifier, {
+    // return fetch('http://kvmarkt-api.azurewebsites.net/api/' + identifier, {
         headers: {
             Authorization: 'Bearer ' + authToken,
         },
@@ -66,4 +67,7 @@ export const writePermanent = (key: string, value: string) => {
 };
 export const readFromPermanent = (key: string) => {
     return localStorage.getItem(localStoragePrefix + key);
+};
+export const deleteFromPermanent = (key: string) => {
+    return localStorage.removeItem(localStoragePrefix + key);
 };

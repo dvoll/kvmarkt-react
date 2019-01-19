@@ -9,6 +9,11 @@
     align-items: center;
 }
 
+.FormField .FormField-description {
+    margin-bottom: 8px;
+    display: block;
+}
+
 .FormField.has-error .FormField-title-line::after {
     content: '';
     display: block;

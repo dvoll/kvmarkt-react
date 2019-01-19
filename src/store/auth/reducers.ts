@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { readFromPermanent, writePermanent } from 'src/utils';
+import { deleteFromPermanent, readFromPermanent, writePermanent } from 'src/utils';
 import { Auth, AuthActionTypes, AuthState } from './types';
 
 const storageTokenKey = 'auth-token';
@@ -56,6 +56,49 @@ const reducer: Reducer<AuthState> = (state = initialState, action) => {
             return { ...state, loading: false, data: action.payload };
         }
         case AuthActionTypes.LOGIN_ERROR: {
+            // TODO: Move side-effects to epic
+            deleteFromPermanent(storageTokenKey);
+            deleteFromPermanent(storageUserKey);
+            deleteFromPermanent(storageFirstnameKey);
+            deleteFromPermanent(storageLastnameKey);
+            deleteFromPermanent(storageEmailKey);
+            return { ...state, loading: false, errors: action.payload };
+        }
+
+        // ? LOGOUT
+        case AuthActionTypes.LOGOUT_REQUEST: {
+            deleteFromPermanent(storageTokenKey);
+            deleteFromPermanent(storageUserKey);
+            deleteFromPermanent(storageFirstnameKey);
+            deleteFromPermanent(storageLastnameKey);
+            deleteFromPermanent(storageEmailKey);
+            return {
+                ...state,
+                loading: false,
+                data: {
+                    authenticated: false,
+                    tokenId: undefined,
+                    contributor: undefined,
+                    userId: undefined,
+                    loggedOut: true,
+                },
+            };
+            // return { ...state, loading: true, errors: undefined };
+        }
+        // case AuthActionTypes.LOGOUT_CANCELED: {
+        //     return { ...state, loading: false };
+        // }
+        case AuthActionTypes.LOGOUT_SUCCESS: {
+            // TODO: Move side-effects to epic
+            deleteFromPermanent(storageTokenKey);
+            deleteFromPermanent(storageUserKey);
+            deleteFromPermanent(storageFirstnameKey);
+            deleteFromPermanent(storageLastnameKey);
+            deleteFromPermanent(storageEmailKey);
+            return { ...state, loading: false, data: { authenticated: false, loggedOut: true } };
+        }
+        case AuthActionTypes.LOGOUT_ERROR: {
+            // TODO: Evaluate what todo here
             return { ...state, loading: false, errors: action.payload };
         }
         default: {
