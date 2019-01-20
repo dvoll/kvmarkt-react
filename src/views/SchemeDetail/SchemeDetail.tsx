@@ -1,4 +1,4 @@
-import { BaseHeading, BaseLabel } from '@dvll/ulight-react';
+import { ActionIconButton, BaseHeading, BaseIcon, BaseLabel, Button } from '@dvll/ulight-react';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import BaseLink from 'src/components/BaseLink/BaseLink';
@@ -28,7 +28,7 @@ class SchemeDetail extends React.Component<
     public render() {
         const propSchemeId = this.props.match.params.id;
         return (
-            <PageLayout>
+            <PageLayout maxWidth={540}>
                 <SchemeContext.Consumer>
                     {schemes => {
                         const scheme = schemes.data.find(s => s.id === +propSchemeId);
@@ -41,13 +41,50 @@ class SchemeDetail extends React.Component<
 
     private schemeRender(scheme: Scheme) {
         return (
-            <div>
-                <BaseLabel name={scheme.categoryName || ''} />
-                <BaseHeading level={2}>{scheme.title}</BaseHeading>
+            <React.Fragment>
+                {/* <BaseLabel name={scheme.categoryName || ''} /> */}
+                <BaseHeading level={1} style={{ fontSize: '1.5rem', textAlign: 'center' }}>
+                    {scheme.title}
+                </BaseHeading>
+                <BaseLabel
+                    style={{
+                        // fontSize: '0.rem',
+                        textAlign: 'center',
+                        letterSpacing: 'normal',
+                        textTransform: 'none',
+                    }}
+                >
+                    von Max Mustermann
+                </BaseLabel>
+                <p>Info Badges</p>
+                <div style={{ display: 'flex', justifyContent: 'start', alignItems: 'center' }}>
+                    <BaseLabel>Orte: </BaseLabel>
+                    <Button>großer Raum</Button>
+                    <Button>Wald</Button>
+                </div>
                 <p>{scheme.description}</p>
+                <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                    <ActionIconButton actionLabel={'Mag ich'}>
+                        <BaseIcon iconName="heart-outline" />
+                    </ActionIconButton>
+                    <ActionIconButton
+                        actionLabel={
+                            <React.Fragment>
+                                Drucken/
+                                <br />
+                                PDF speichern
+                            </React.Fragment>
+                        }
+                    >
+                        <BaseIcon iconName="printer" />
+                    </ActionIconButton>
+                    <ActionIconButton actionLabel={'Teilen'}>
+                        <BaseIcon iconName="share" />
+                    </ActionIconButton>
+                </div>
                 <p dangerouslySetInnerHTML={{ __html: scheme.content || '' }} />
                 <BaseLink to={`${scheme.id}/edit`}>Bearbeiten</BaseLink>
-            </div>
+            </React.Fragment>
         );
     }
 }

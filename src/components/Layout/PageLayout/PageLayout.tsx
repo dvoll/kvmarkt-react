@@ -1,20 +1,26 @@
-import * as React from "react";
-import "./PageLayout.css";
+import * as React from 'react';
+import './PageLayout.css';
 
-interface Props {
-    className?: string;
+interface Props extends React.HTMLProps<any> {
+    maxWidth?: number;
 }
 
 class PageLayout extends React.Component<Props, {}> {
-
     constructor(props: Props) {
         super(props);
     }
 
     public render() {
-        return <main className={"PageLayout " + this.props.className }>
+        const { maxWidth, style } = this.props;
+        const styles: React.CSSProperties = {};
+        if (maxWidth !== undefined) {
+            styles.maxWidth = maxWidth;
+        }
+        return (
+            <main className={'PageLayout ' + this.props.className} style={{ ...style, ...styles }}>
                 {this.props.children}
-            </main>;
+            </main>
+        );
     }
 }
 
