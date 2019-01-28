@@ -1,31 +1,55 @@
 .App {
-  /* text-align: center; */
-  padding: 15px;
-  height: 100vh;
-  color: rgb(50,50,50);
+    /* text-align: center; */
+    padding: 15px;
+    height: 100vh;
+    color: rgb(50, 50, 50);
 }
 
 .App-logo {
-  /* animation: App-logo-spin infinite 20s linear; */
-  height: 80px;
+    /* animation: App-logo-spin infinite 20s linear; */
+    height: 80px;
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+    background-color: #222;
+    height: 150px;
+    padding: 20px;
+    color: white;
 }
 
 .App-title {
-  font-size: 1.5em;
+    font-size: 1.5em;
 }
 
 .App-intro {
-  font-size: large;
+    font-size: large;
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/** Kvmarkt-InfoBadesContainer */
+.Kvmarkt-InfoBadesContainer {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-auto-columns: auto;
+    grid-auto-flow: column;
+    justify-content: space-around;
+    justify-items: center;
+    align-items: center;
+    gap: 5px 20px;
+
+    max-width: 450px;
+    margin: 40px auto 40px auto;
+}
+
+.Kvmarkt-InfoBadesContainer > * {
+    min-width: 90px;
+    text-align: center;
 }

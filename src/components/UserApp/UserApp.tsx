@@ -14,7 +14,7 @@ import { SchemesState } from 'src/store/schemes/types';
 import Account from 'src/views/account/Account';
 import Dashboard from 'src/views/dashboard/Dashboard';
 import SchemeList from 'src/views/scheme-list/SchemeList';
-import SchemeDetail from 'src/views/SchemeDetail/SchemeDetail';
+import SchemeDetailPage from 'src/views/SchemeDetailPage/SchemeDetailPage';
 import SchemeEditPage from 'src/views/SchemeEditPage/SchemeEditPage';
 import SchemeFormPage from 'src/views/SchemeFormPage/SchemeFormPage';
 import NavPane from '../NavPane/NavPane';
@@ -89,7 +89,7 @@ class UserApp extends React.PureComponent<
                                 <Route path="/schemes" exact component={SchemeList} />
                                 <Route path="/schemes/new" component={SchemeFormPage} />
                                 <Route path="/schemes/:id/edit" exact component={SchemeEditPage} />
-                                <Route path="/schemes/:id" exact component={SchemeDetail} />
+                                <Route path="/schemes/:id" exact component={SchemeDetailPage} />
                                 <Route path="/account" component={Account} />
                                 <Redirect from="/" to="/dashboard" />
                             </Switch>

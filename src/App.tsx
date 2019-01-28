@@ -57,10 +57,11 @@ class App extends React.Component<AppProps, {}> {
 
     private setBodyStyle() {
         const body = document.getElementsByTagName('body').item(0);
-        // tslint:disable-next-line:no-unused-expression
+        const font = this.theme.font;
         if (body !== null) {
             body.style.setProperty('background-color', `rgb(${this.theme.background})`);
             body.style.setProperty('color', `rgb(${this.theme.foreground})`);
+            body.style.setProperty('font-family', `${font ? font.text + ',' : ''} Arial, sans-serif`);
         }
     }
 }
