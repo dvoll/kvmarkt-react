@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import PageLayout from 'src/components/layout/PageLayout/PageLayout';
-import withTitle from 'src/components/layout/PageLayout/withTitleComponent';
+import PageLayout from 'src/components/Layout/PageLayout/PageLayout';
+import withTitle from 'src/components/Layout/PageLayout/withTitleComponent';
 import SchemeDetail from 'src/container/SchemeDetail/SchemeDetail';
 import { SchemeContext } from 'src/scheme/scheme-context';
 import { WithTitleHandlerProps } from '../dashboard/Dashboard';

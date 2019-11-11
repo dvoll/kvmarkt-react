@@ -22,6 +22,8 @@ export interface Scheme {
     updated?: string;
     isFavorite?: boolean;
     duration?: { hours: number; minutes: number };
+
+    touched?: any; // TODO: Move to a Input interface
 }
 
 // This type is basically shorthand for `{ [key: string]: any }`. Feel free to replace `any` with

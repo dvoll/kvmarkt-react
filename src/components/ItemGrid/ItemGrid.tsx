@@ -1,5 +1,5 @@
-import * as React from "react";
-// import PageLayout from "src/components/layout/PageLayout/PageLayout";
+import * as React from 'react';
+// import PageLayout from "src/components/Layout/PageLayout/PageLayout";
 // import { Scheme } from "src/scheme";
 // import SchemeCard from "src/scheme/SchemeCard/SchemeCard";
 // import { schemes } from "src/scheme/schemes.mock";
@@ -11,19 +11,19 @@ interface ItemGridProps {
 
 class ItemGrid extends React.Component<ItemGridProps, {}> {
     public render() {
-        const {items, mapping} = this.props;
+        const { items, mapping } = this.props;
         return (
             <div
                 style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill,  minmax(280px, 1fr))",
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill,  minmax(280px, 1fr))',
                     // gridGap: 20,
-                    justifyContent: "center",
-                    justifyItems: "center",
-                    alignItems: "center"
+                    justifyContent: 'center',
+                    justifyItems: 'center',
+                    alignItems: 'center',
                 }}
             >
-                { items.map(mapping) }
+                {items.map(mapping)}
                 {/* {this.props.items ? this.props.items : this.props.children} */}
             </div>
         );

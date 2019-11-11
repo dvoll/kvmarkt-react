@@ -33,7 +33,14 @@ class SchemeDetail extends React.Component<SchemeDetailProps, {}> {
                                 </span>
                             ),
                         },
-                        { name: 'Dauer', content: <span>{scheme.duration}</span> },
+                        {
+                            name: 'Dauer',
+                            content: (
+                                <span>
+                                    {scheme.duration ? scheme.duration.hours + ':' + scheme.duration.minutes : ''}
+                                </span>
+                            ),
+                        },
                         {
                             name: 'Kategorie',
                             content: (

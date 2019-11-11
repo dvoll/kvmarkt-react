@@ -1,7 +1,7 @@
 import { BaseHeading, BaseLabel } from '@dvll/ulight-react';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-import PageLayout from 'src/components/layout/PageLayout/PageLayout';
+import PageLayout from 'src/components/Layout/PageLayout/PageLayout';
 import LoadingSpinner from 'src/components/LoadingSpinner/LoadingSpinner';
 import SchemeForm from 'src/container/SchemeForm/SchemeForm';
 import { SchemeContext } from 'src/scheme/scheme-context';

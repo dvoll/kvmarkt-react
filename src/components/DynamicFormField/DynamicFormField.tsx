@@ -46,10 +46,10 @@ const DynamicFormField: React.SFC<DynFormTypes> = props => {
                 ));
             element = (
                 <select
-                    {...props as React.DetailedHTMLProps<
+                    {...(props as React.DetailedHTMLProps<
                         React.SelectHTMLAttributes<HTMLSelectElement>,
                         HTMLSelectElement
-                    >}
+                    >)}
                 >
                     {items}
                 </select>
@@ -60,21 +60,20 @@ const DynamicFormField: React.SFC<DynFormTypes> = props => {
         case DynamicFormInputTypes.PASSWORD:
         case DynamicFormInputTypes.BUTTON:
         case DynamicFormInputTypes.SUBMIT:
-            element = (
-                <Input
-                    key={'DynamicFormFiled' + props.id}
-                    {...props as any} /* React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>} */
-                    type={props.type}
-                />
-            );
+            element = null;
+            <Input
+                key={'DynamicFormFiled' + props.id}
+                {...(props as any)} /* React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>} */
+                type={props.type}
+            />;
             break;
         case DynamicFormInputTypes.TEXTAREA:
             element = (
                 <textarea
-                    {...props as React.DetailedHTMLProps<
+                    {...(props as React.DetailedHTMLProps<
                         React.InputHTMLAttributes<HTMLTextAreaElement>,
                         HTMLTextAreaElement
-                    >}
+                    >)}
                 />
             );
             break;

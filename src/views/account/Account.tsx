@@ -1,7 +1,7 @@
 import { BaseHeading, BaseLabel } from '@dvll/ulight-react';
 import * as React from 'react';
-import PageLayout from 'src/components/layout/PageLayout/PageLayout';
-import withTitle from 'src/components/layout/PageLayout/withTitleComponent';
+import PageLayout from 'src/components/Layout/PageLayout/PageLayout';
+import withTitle from 'src/components/Layout/PageLayout/withTitleComponent';
 import UserAppSettings from 'src/container/UserAppSettings/UserAppSettings';
 
 // export interface AccountProps {

@@ -1,14 +1,14 @@
 import { BaseHeading, BaseLabel } from '@dvll/ulight-react';
 import * as React from 'react';
 import ItemGrid from 'src/components/ItemGrid/ItemGrid';
-import PageLayout from 'src/components/layout/PageLayout/PageLayout';
-import withTitle from 'src/components/layout/PageLayout/withTitleComponent';
+import PageLayout from 'src/components/Layout/PageLayout/PageLayout';
+import withTitle from 'src/components/Layout/PageLayout/withTitleComponent';
 import SchemeForm from 'src/container/SchemeForm/SchemeFormOld';
 import { SchemeContext } from 'src/scheme/scheme-context';
 import SchemeCard from 'src/scheme/SchemeCard/SchemeCard';
 import { Scheme } from 'src/store/schemes/types';
 // import { WithTitleHandlerProps } from '../dashboard/Dashboard';
-// import PageLayout from "src/components/layout/PageLayout/PageLayout";
+// import PageLayout from "src/components/Layout/PageLayout/PageLayout";
 // import { Scheme } from "src/scheme";
 // import SchemeCard from "src/scheme/SchemeCard/SchemeCard";
 // import { schemes } from "src/scheme/schemes.mock";

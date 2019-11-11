@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { Dispatch } from 'redux';
 import FormField from 'src/components/DynamicFormField/FormField';
-import PageLayout from 'src/components/layout/PageLayout/PageLayout';
+import PageLayout from 'src/components/Layout/PageLayout/PageLayout';
 import { ApplicationState } from 'src/store';
 import { login } from 'src/store/auth/actions';
 import { AuthState } from 'src/store/auth/types';
